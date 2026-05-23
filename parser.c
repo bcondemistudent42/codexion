@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 23:52:51 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/23 19:56:30 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/23 20:18:16 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int check_scheduler(char *sring);
 int	parser_manager(int ac, char **argv)
 {
 	int	i;
-
+// to do isdigit before all
 	i = 1;
 	if (ac != 9)
 		return (-1);
