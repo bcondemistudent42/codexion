@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 23:52:51 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/23 17:44:16 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/23 19:56:30 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,18 @@ int	parser_manager(int ac, char **argv)
 {
 	int	i;
 
-	i = 2;
+	i = 1;
 	if (ac != 9)
 		return (-1);
-	if (check_nb_worker(atoi(argv[1])) == -1)
-		return (-1);
-		while (i < 8)
+	// if (check_nb_worker(atoi(argv[1])) == -1)
+		// return (-1);
+	while (i < 8)
+	{
 		if (check_number(atoi(argv[i])) == -1)
 			return (-1);
 		else
 			i++;
+	}
 	if (check_scheduler(argv[8]) == SCHED_ERROR)
 		return (-1);
 	return (1);
@@ -55,20 +57,20 @@ int ft_error()
 
 int check_number(int n)
 {
-	if (n < 0 ||
-		n > 2147483647)
-		return (-1);
-	return (1);
-}
-
-
-int check_nb_worker(int n)
-{
 	if (n <= 0 ||
 		n > 2147483647)
 		return (-1);
 	return (1);
 }
+
+
+// int check_nb_worker(int n)
+// {
+// 	if (n <= 0 ||
+// 		n > 2147483647)
+// 		return (-1);
+// 	return (1);
+// }
 
 
 int check_scheduler(char *string)
