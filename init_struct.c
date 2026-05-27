@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 17:06:40 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 17:47:51 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		assignator_coders(int utils_const[], t_coder **coders);
 void	loop_on_coder(int utils_const[], t_coder **coders);
 void	init_coder(int index, int utils_const[], t_coder **coders);
 
-int	init_manager(char **argv, int utils_const[], t_coder **coders)
+int	init_manager(char **argv, int utils_const[], t_coder **coders, t_manager *manager)
 {
 	assign_const(argv, utils_const);
 	// to handle if only 1 coder to find a solution to problem
@@ -26,6 +26,10 @@ int	init_manager(char **argv, int utils_const[], t_coder **coders)
 	if (assignator_coders(utils_const, coders) == -1)
 		return (-1);
 	loop_on_coder(utils_const, coders);
+
+	manager->coders = coders;
+	manager->utils_const = utils_const; //line issue can do manager init
+
 	return (0);
 }
 
@@ -45,7 +49,6 @@ int	assignator_coders(int utils_const[], t_coder **coders)
 	int		i;
 	t_coder	*my_coder;
 
-	// int *coders to assign each coder in a array index
 	i = 0;
 	while (i < utils_const[NB_CODERS])
 	{
@@ -53,7 +56,6 @@ int	assignator_coders(int utils_const[], t_coder **coders)
 		if (my_coder == NULL)
 		{
 			ft_free_coders(coders, i);
-			free(coders);
 			return (-1);
 		}
 		coders[i] = my_coder;
