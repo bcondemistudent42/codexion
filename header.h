@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/26 19:56:46 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 14:24:02 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-
-int	ft_error(void);
-int	parser_manager(int ac, char **argv);
 
 
 typedef enum State
@@ -67,5 +64,11 @@ typedef enum e_scheduler
 	SCHED_FIFO = 1,
 	SCHED_EDF = 2
 }	t_scheduler;
+
+int	ft_error(void);
+int allocation_error(void);
+int	parser_manager(int ac, char **argv);
+void ft_free_coders(t_coder *coders[], int nb_coders);
+int init_manager(char **argv, int utils_const[], t_coder *coders[]);
 
 #endif

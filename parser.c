@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 23:52:51 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/26 13:11:36 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 14:17:13 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,6 @@ int	parser_manager(int ac, char **argv)
 	if (check_scheduler(argv[8]) == SCHED_ERROR)
 		return (-1);
 	return (1);
-}
-
-int	ft_error(void)
-{
-	printf("Error Usage:\n");
-	printf("int: number_of_coders\n");
-	printf("int: time_to_burnout\n");
-	printf("int: time_to_compile\n");
-	printf("int: time_to_debug\n");
-	printf("int: time_to_refactor\n");
-	printf("int: number_of_compiles_required\n");
-	printf("int: dongle_cooldown\n");
-	printf("scheduler: {'fifo' or 'edf'}\n");
-	return (-1);
 }
 
 int	check_number(int n)
