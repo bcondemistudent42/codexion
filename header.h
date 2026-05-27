@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 17:43:15 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 17:54:15 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ int		allocation_error(void);
 int		parser_manager(int ac, char **argv);
 void	ft_free_coders(t_coder **coders, int index_to_stop);
 int free_coder_and_manager(t_coder **coders, t_manager *manager);
-int		init_manager(char **argv, int utils_const[], t_coder **coders, t_manager *manager);
+int free_coder_and_manager_with_error(t_coder **coders, t_manager *manager);
 void ft_big_free(t_coder **coders, int utils_const[], t_manager *manager);
+int		init_manager(char **argv, int utils_const[], t_coder **coders, t_manager *manager);
 
 #endif
