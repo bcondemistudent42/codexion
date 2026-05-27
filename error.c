@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:17:16 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 14:50:13 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:09:34 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ int	ft_error(void)
 	return (-1);
 }
 
-int allocation_error(void)
+int	allocation_error(void)
 {
 	printf("A malloc failed allocating memory\n");
 	return (-1);
 }
 
-void ft_free_coders(t_coder *coders[], int index_to_stop)
+void	ft_free_coders(t_coder *coders[], int index_to_stop)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < index_to_stop)

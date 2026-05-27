@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 14:48:06 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:09:53 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdlib.h>
 # include <string.h>
 
-
 typedef enum State
 {
 	COMPILING,
@@ -25,7 +24,6 @@ typedef enum State
 	REFACTO,
 	INACTIVE
 }	t_state;
-
 
 typedef enum Const
 {
@@ -38,12 +36,11 @@ typedef enum Const
 	NB_CODERS
 }	t_Const;
 
-typedef struct	s_Manager
+typedef struct s_Manager
 {
 	int	*coders;
 	int	*utils_const;
 }	t_manager;
-
 
 typedef struct s_coder	t_coder;
 struct	s_coder
@@ -65,10 +62,10 @@ typedef enum e_scheduler
 	SCHED_EDF = 2
 }	t_scheduler;
 
-int	ft_error(void);
-int allocation_error(void);
-int	parser_manager(int ac, char **argv);
-void ft_free_coders(t_coder *coders[], int index_to_stop);
-int init_manager(char **argv, int utils_const[], t_coder *coders[]);
+int		ft_error(void);
+int		allocation_error(void);
+int		parser_manager(int ac, char **argv);
+void	ft_free_coders(t_coder *coders[], int index_to_stop);
+int		init_manager(char **argv, int utils_const[], t_coder *coders[]);
 
 #endif
