@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 15:09:53 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:46:49 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef enum e_scheduler
 int		ft_error(void);
 int		allocation_error(void);
 int		parser_manager(int ac, char **argv);
-void	ft_free_coders(t_coder *coders[], int index_to_stop);
-int		init_manager(char **argv, int utils_const[], t_coder *coders[]);
+void	ft_free_coders(t_coder **coders, int index_to_stop);
+int		init_manager(char **argv, int utils_const[], t_coder **coders);
 
 #endif

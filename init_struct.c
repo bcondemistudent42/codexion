@@ -6,18 +6,18 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 15:10:51 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:46:30 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
 void	assign_const(char **argv, int utils_const[]);
-int		assignator_coders(int utils_const[], t_coder *coders[]);
-void	loop_on_coder(int utils_const[], t_coder *coders[]);
-void	init_coder(int index, int utils_const[], t_coder *coders[]);
+int		assignator_coders(int utils_const[], t_coder **coders);
+void	loop_on_coder(int utils_const[], t_coder **coders);
+void	init_coder(int index, int utils_const[], t_coder **coders);
 
-int	init_manager(char **argv, int utils_const[], t_coder *coders[])
+int	init_manager(char **argv, int utils_const[], t_coder **coders)
 {
 	assign_const(argv, utils_const);
 	// to handle if only 1 coder to find a solution to problem
@@ -40,7 +40,7 @@ void	assign_const(char **argv, int utils_const[])
 	utils_const[DONGLE_COOLDOWN] = atoi(argv[7]);
 }
 
-int	assignator_coders(int utils_const[], t_coder *coders[])
+int	assignator_coders(int utils_const[], t_coder **coders)
 {
 	int		i;
 	t_coder	*my_coder;
@@ -53,6 +53,7 @@ int	assignator_coders(int utils_const[], t_coder *coders[])
 		if (my_coder == NULL)
 		{
 			ft_free_coders(coders, i);
+			free(coders);
 			return (-1);
 		}
 		coders[i] = my_coder;
@@ -61,7 +62,7 @@ int	assignator_coders(int utils_const[], t_coder *coders[])
 	return (0);
 }
 
-void	init_coder(int index, int utils_const[], t_coder *coders[])
+void	init_coder(int index, int utils_const[], t_coder **coders)
 {
 	int	id;
 
@@ -89,7 +90,7 @@ void	init_coder(int index, int utils_const[], t_coder *coders[])
 	coders[index]->state = INACTIVE;
 }
 
-void	loop_on_coder(int utils_const[], t_coder *coders[])
+void	loop_on_coder(int utils_const[], t_coder **coders)
 {
 	int	i;
 
