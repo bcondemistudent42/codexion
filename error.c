@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:17:16 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 15:46:56 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 16:50:31 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,12 @@ void	ft_free_coders(t_coder **coders, int index_to_stop)
 		free(coders[i]);
 		i++;
 	}
+}
+
+
+int free_coder_and_manager(t_coder **coders, t_manager *manager)
+{
+	free(coders);
+	free(manager);
+	return (allocation_error());
 }

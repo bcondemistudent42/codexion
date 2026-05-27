@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 23:52:51 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 14:17:13 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:57:00 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	check_scheduler(char *string)
 	if (fifo != 0 && edf != 0)
 		return (SCHED_ERROR);
 	else if (fifo == 0)
-		return (SCHED_FIFO);
+		return (SCHED_FIFOO);
 	return (SCHED_EDF);
 }
 
