@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 17:57:06 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 19:13:11 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ int	main(int ac, char **argv)
 	}
 	ft_big_free(coders, utils_const, manager);
 }
+
+// to link dongles to coders
+// to do create thread and my_function work correctly
+// to do the monitor stuff to handle each coder and time correctly
 
 
 	// int j = 0;

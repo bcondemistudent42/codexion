@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 17:55:32 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 17:57:45 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,8 @@ int	init_manager(char **argv, int utils_const[], t_coder **coders, t_manager *ma
 	if (assignator_coders(utils_const, coders) == -1)
 		return (-1);
 	loop_on_coder(utils_const, coders);
-
 	manager->coders = coders;
-	manager->utils_const = utils_const; //line issue can do manager init
-
+	manager->utils_const = utils_const;
 	return (0);
 }
 
