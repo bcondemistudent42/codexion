@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 14:38:57 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:01:50 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,7 @@ int	main(int ac, char **argv)
 		printf("elt == %d, left == %d, right == %d\n", coders[j]->id, coders[j]->left->id,coders[j]->right->id);
 		j++;
 	}
+
+	// to free coders at the end
+	ft_free_coders(coders, utils_const[NB_CODERS]);
 }

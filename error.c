@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:17:16 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 14:24:39 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/27 14:50:13 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ int allocation_error(void)
 	return (-1);
 }
 
-void ft_free_coders(t_coder *coders[], int nb_coders)
+void ft_free_coders(t_coder *coders[], int index_to_stop)
 {
 	int i;
 
 	i = 0;
-	while (i < nb_coders)
+	while (i < index_to_stop)
 	{
 		free(coders[i]);
 		i++;
