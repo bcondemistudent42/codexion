@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/28 18:39:05 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/28 18:45:42 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,6 @@ int make_thread_join(t_manager *manager)
 		pthread_join(manager->coders[i]->thread_id, NULL);
 		i++;
 	}
+	printf("CLOSED ALL THRADS\n");
 	return (0);
 }
