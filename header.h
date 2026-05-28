@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 17:54:15 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/28 17:10:00 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <unistd.h>
 # include <pthread.h>
+
+typedef struct s_coder	t_coder;
 
 typedef enum State
 {
@@ -35,25 +38,31 @@ typedef enum Const
 	COMPILE_REQUIRED,
 	DONGLE_COOLDOWN,
 	NB_CODERS
-}	t_Const;
+}	t_const;
 
-typedef struct s_coder	t_coder;
-struct	s_coder
+typedef enum Bool
 {
-	int			id;
-	int			nb_dongle;
-	int			compile_cnt;
-	int			*utils_const;
-	long long	last_compile;
-	t_coder		*left;
-	t_coder		*right;
-	t_state		state;
-};
+	FALSE,
+	TRUE
+}	t_bool;
+
+typedef struct s_dongle
+{
+	t_coder *owner;
+	long long last_used;
+	t_bool available;
+	int	*utils_const;
+}	t_dongle;
+
 
 typedef struct s_Manager
 {
 	t_coder	**coders;
 	int	*utils_const;
+	int	nb_ready;
+	pthread_cond_t start_cond;
+	pthread_cond_t manager_mutex;
+	pthread_mutex_t mutex_ready;
 }	t_manager;
 
 
@@ -64,13 +73,32 @@ typedef enum e_scheduler
 	SCHED_EDF = 2
 }	t_scheduler;
 
+
+struct	s_coder
+{
+	int			id;
+	int			nb_dongle;
+	int			compile_cnt;
+	int			*utils_const;
+	long long	last_compile;
+	pthread_t	thread_id;
+	pthread_mutex_t coder_mutex;
+	pthread_cond_t *start_cond;
+	t_coder		*left;
+	t_coder		*right;
+	t_state		state;
+	t_manager *manager;
+};
+
+
 int		ft_error(void);
 int		allocation_error(void);
+int	create_thread(int nb_thread, t_manager *manager);
 int		parser_manager(int ac, char **argv);
 void	ft_free_coders(t_coder **coders, int index_to_stop);
 int free_coder_and_manager(t_coder **coders, t_manager *manager);
 int free_coder_and_manager_with_error(t_coder **coders, t_manager *manager);
 void ft_big_free(t_coder **coders, int utils_const[], t_manager *manager);
-int		init_manager(char **argv, int utils_const[], t_coder **coders, t_manager *manager);
+int		make_init_coders(char **argv, int utils_const[], t_coder **coders, t_manager *manager);
 
 #endif

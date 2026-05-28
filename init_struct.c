@@ -6,26 +6,30 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 17:57:45 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/28 17:10:13 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
 void	assign_const(char **argv, int utils_const[]);
-int		assignator_coders(int utils_const[], t_coder **coders);
-void	loop_on_coder(int utils_const[], t_coder **coders);
-void	init_coder(int index, int utils_const[], t_coder **coders);
+int	assignator_coders(int utils_const[], t_coder **coders);
+void	loop_on_coder(int utils_const[], t_coder **coders, t_manager *manager);
+void	init_coder(int index, int utils_const[], t_coder **coders, t_manager *manager);
 
-int	init_manager(char **argv, int utils_const[], t_coder **coders, t_manager *manager)
+int	make_init_coders(char **argv, int utils_const[], t_coder **coders, t_manager *manager)
 {
 	assign_const(argv, utils_const);
 	// to handle if only 1 coder to find a solution to problem
 	// to ask he to make it burn out
 	// to see also if only two element left and right are the same to handle
+	manager->nb_ready = 0;
+	pthread_cond_init(&manager->start_cond, NULL);
+	pthread_cond_init(&manager->manager_mutex, NULL);
+	pthread_mutex_init(&manager->mutex_ready, NULL);
 	if (assignator_coders(utils_const, coders) == -1)
 		return (-1);
-	loop_on_coder(utils_const, coders);
+	loop_on_coder(utils_const, coders, manager);
 	manager->coders = coders;
 	manager->utils_const = utils_const;
 	return (0);
@@ -62,12 +66,10 @@ int	assignator_coders(int utils_const[], t_coder **coders)
 	return (0);
 }
 
-void	init_coder(int index, int utils_const[], t_coder **coders)
+void	init_coder(int index, int utils_const[], t_coder **coders, t_manager *manager)
 {
-	int	id;
-
-	id = index + 1;
-	coders[index]->id = id;
+	coders[index]->manager = manager;
+	coders[index]->id = index + 1;
 	coders[index]->nb_dongle = 1;
 	coders[index]->compile_cnt = 0;
 	coders[index]->utils_const = utils_const;
@@ -90,14 +92,14 @@ void	init_coder(int index, int utils_const[], t_coder **coders)
 	coders[index]->state = INACTIVE;
 }
 
-void	loop_on_coder(int utils_const[], t_coder **coders)
+void	loop_on_coder(int utils_const[], t_coder **coders, t_manager *manager)
 {
 	int	i;
 
 	i = 0;
 	while (i < utils_const[NB_CODERS])
 	{
-		init_coder(i, utils_const, coders);
+		init_coder(i, utils_const, coders, manager);
 		i++;
 	}
 }

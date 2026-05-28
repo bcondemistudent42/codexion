@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 19:13:11 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/28 15:41:53 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,10 @@ int	main(int ac, char **argv)
 	manager = malloc(sizeof(t_manager));
 	if (manager == NULL)
 		return (free_coder_and_manager(coders, manager));
-	if (init_manager(argv, utils_const, coders, manager) == -1)
+	if (make_init_coders(argv, utils_const, coders, manager) == -1)
 		return (free_coder_and_manager(coders, manager));
-	int j = 0;
-	while (j < atoi(argv[1]))
-	{
-		printf("%d\n", manager->coders[j]->id);
-		j++;
-	}
+
+	create_thread(utils_const[NB_CODERS], manager);
 	ft_big_free(coders, utils_const, manager);
 }
 
