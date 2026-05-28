@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/28 17:10:13 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/28 18:13:33 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ int	make_init_coders(char **argv, int utils_const[], t_coder **coders, t_manager
 	// to ask he to make it burn out
 	// to see also if only two element left and right are the same to handle
 	manager->nb_ready = 0;
-	pthread_cond_init(&manager->start_cond, NULL);
-	pthread_cond_init(&manager->manager_mutex, NULL);
-	pthread_mutex_init(&manager->mutex_ready, NULL);
+	pthread_cond_init(&manager->manager_sleep, NULL); // to destroy at end
+	pthread_cond_init(&manager->start_cond, NULL); // to destroy at end
+	pthread_mutex_init(&manager->mutex_manager, NULL); // to destroy at end
+	pthread_mutex_init(&manager->start_ready_mtx, NULL); // to destroy at end
 	if (assignator_coders(utils_const, coders) == -1)
 		return (-1);
 	loop_on_coder(utils_const, coders, manager);

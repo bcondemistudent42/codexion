@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/28 17:09:15 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/28 18:39:05 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,61 +18,50 @@ int make_thread_join(t_manager *manager);
 
 int	create_thread(int nb_thread, t_manager *manager)
 {
-	int		i;
-	
+	int i;
+
 	i = 0;
-	while (i < nb_thread)
+	while (i < manager->utils_const[NB_CODERS])
 	{
-		
-		if (pthread_create(&manager->coders[i]->thread_id, NULL, (void *)my_function, manager->coders[i]) != 0) // to protect
-		{
-			// to free all and handle error
-			return (-1);
-		}
-		// printf("i == %d\n", i);
+		pthread_create(&manager->coders[i]->thread_id, NULL, (void *) my_function, manager->coders[i]);
+		// create and check if error
 		i++;
 	}
-	pthread_mutex_lock(&manager->manager_mutex);
+	pthread_mutex_lock(&manager->mutex_manager);
 	while (manager->nb_ready < manager->utils_const[NB_CODERS])
-		 pthread_cond_wait(&manager->mutex_ready, &manager->manager_mutex);
+		pthread_cond_wait(&manager->manager_sleep, &manager->mutex_manager);
+	pthread_mutex_unlock(&manager->mutex_manager);
 	pthread_cond_broadcast(&manager->start_cond);
 	make_thread_join(manager);
 	return (0);
-
-	// tant que simulation pas start et moniteur not created and threads not created wait
-	// to do a function that will join all thread in the end
 }
 
 
 void my_function(void *my_coder)
 {
-	t_coder *casted_coder;
-	pthread_mutex_t ready_mutex;
+	t_coder *coder;
+	coder = (t_coder*)(my_coder);
+	// waiting for all coders to be ready
+	pthread_mutex_lock(&coder->manager->mutex_manager);
+	coder->manager->nb_ready++;
+	if (coder->manager->nb_ready == coder->manager->utils_const[NB_CODERS])
+		pthread_cond_signal(&coder->manager->manager_sleep); // wake up main and make it launch all thread
+	pthread_mutex_unlock(&coder->manager->mutex_manager);
 
-	casted_coder = (t_coder*)my_coder;
-	ready_mutex = casted_coder->manager->mutex_ready;
-	pthread_mutex_lock(&ready_mutex);
-	casted_coder->manager->nb_ready++;
-	if (casted_coder->manager->nb_ready == casted_coder->manager->utils_const[NB_CODERS])
-		pthread_cond_signal(&casted_coder->manager->manager_mutex);
-	pthread_mutex_unlock(&ready_mutex);
-	
-	// pthread_mutex_init(coder_mutex, NULL);
-	// 
-	// pthread_mutex_lock(coder_mutex);
-	// pthread_cond_wait(casted_coder->start_cond, coder_mutex);
-	
-	// wait for all thread to be ready
-	printf("thread created for coder nb == %d\n", casted_coder->id);
-	return ;
+	// starting true job of the thread, mutex to protect the values
+	pthread_mutex_lock(&coder->manager->start_ready_mtx);
+	pthread_cond_wait(&coder->manager->start_cond, &coder->manager->start_ready_mtx);
+	printf("Created thread for coder: %d\n", coder->id);
 	// checking if dongle available 	
-	// pthread_mutex_unlock(coder_mutex);
-
 	// compile 
 	// debug 
 	// refacto
+	pthread_mutex_unlock(&coder->manager->start_ready_mtx);
+	
 
 }
+
+
 
 int make_thread_join(t_manager *manager)
 {

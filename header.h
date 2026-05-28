@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/28 17:10:00 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/28 17:57:41 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,10 @@ typedef struct s_Manager
 	t_coder	**coders;
 	int	*utils_const;
 	int	nb_ready;
+	pthread_cond_t manager_sleep;
+	pthread_mutex_t mutex_manager;
 	pthread_cond_t start_cond;
-	pthread_cond_t manager_mutex;
-	pthread_mutex_t mutex_ready;
+	pthread_mutex_t start_ready_mtx;
 }	t_manager;
 
 
@@ -82,8 +83,6 @@ struct	s_coder
 	int			*utils_const;
 	long long	last_compile;
 	pthread_t	thread_id;
-	pthread_mutex_t coder_mutex;
-	pthread_cond_t *start_cond;
 	t_coder		*left;
 	t_coder		*right;
 	t_state		state;
