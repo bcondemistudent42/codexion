@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/28 18:40:15 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/29 10:47:27 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int ac, char **argv)
 
 	if (parser_manager(ac, argv) == -1)
 		return (ft_error());
-	coders = malloc(sizeof(t_coder) * atoi(argv[1]));
+	coders = malloc(sizeof(t_coder *) * atoi(argv[1]));
 	if (coders == NULL)
 		return (allocation_error());
 	manager = malloc(sizeof(t_manager));
