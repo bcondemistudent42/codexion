@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:17:16 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/27 17:54:05 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/29 15:24:52 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,9 @@ int free_coder_and_manager(t_coder **coders, t_manager *manager)
 	return (-1);
 }
 
-void ft_big_free(t_coder **coders, int utils_const[], t_manager *manager)
+void ft_big_free(t_manager *manager)
 {
-	ft_free_coders(coders, utils_const[NB_CODERS]);
-	free_coder_and_manager(coders, manager);
+	free(manager->dongles);
+	ft_free_coders(manager->coders, manager->utils_const[NB_CODERS]);
+	free_coder_and_manager(manager->coders, manager);
 }

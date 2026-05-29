@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/29 10:39:51 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/29 16:01:08 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,24 @@
 
 
 void my_function(void *manager);
-int make_thread_join(t_manager *manager);
+int make_thread_join(t_manager *manager, int index);
 
 int	create_thread(int nb_thread, t_manager *manager)
 {
 	int i;
 
 	i = 0;
+	printf("\nCreating Thread: \n");
 	while (i < manager->utils_const[NB_CODERS])
 	{
-		pthread_create(&manager->coders[i]->thread_id, NULL, (void *) my_function, manager->coders[i]);
+		if (pthread_create(&manager->coders[i]->thread_id, NULL, (void *) my_function, manager->coders[i]) != 0)
+		{
+			// to handle this error case later, delete mutex and everything
+			// to see with Adrien on monday
+			printf("ERROR CREATING THREAD");
+			make_thread_join(manager, i);
+			return (-1);
+		}
 		// create and check if error
 		i++;
 	}
@@ -35,7 +43,8 @@ int	create_thread(int nb_thread, t_manager *manager)
 	pthread_cond_broadcast(&manager->start_cond);
 	pthread_mutex_unlock(&manager->start_ready_mtx);
 
-	make_thread_join(manager);
+	make_thread_join(manager, manager->utils_const[NB_CODERS]);
+	printf("CLOSED ALL THREADS\n\n");
 	return (0);
 }
 
@@ -66,17 +75,16 @@ void my_function(void *my_coder)
 
 
 
-int make_thread_join(t_manager *manager)
+int make_thread_join(t_manager *manager, int index)
 {
 	int i;
 
 	i = 0;
-	while (i < manager->utils_const[NB_CODERS])
+	while (i < index)
 	{
 		// check succeded to join thread
 		pthread_join(manager->coders[i]->thread_id, NULL);
 		i++;
 	}
-	printf("CLOSED ALL THRADS\n");
 	return (0);
 }

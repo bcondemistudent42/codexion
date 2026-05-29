@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/28 17:57:41 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/29 16:02:21 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef enum Bool
 
 typedef struct s_dongle
 {
-	t_coder *owner;
+	int	id;
 	long long last_used;
 	t_bool available;
 	int	*utils_const;
@@ -58,6 +58,7 @@ typedef struct s_dongle
 typedef struct s_Manager
 {
 	t_coder	**coders;
+	t_dongle	*dongles;
 	int	*utils_const;
 	int	nb_ready;
 	pthread_cond_t manager_sleep;
@@ -83,8 +84,8 @@ struct	s_coder
 	int			*utils_const;
 	long long	last_compile;
 	pthread_t	thread_id;
-	t_coder		*left;
-	t_coder		*right;
+	t_dongle	*left;
+	t_dongle	*right;
 	t_state		state;
 	t_manager *manager;
 };
@@ -97,7 +98,8 @@ int		parser_manager(int ac, char **argv);
 void	ft_free_coders(t_coder **coders, int index_to_stop);
 int free_coder_and_manager(t_coder **coders, t_manager *manager);
 int free_coder_and_manager_with_error(t_coder **coders, t_manager *manager);
-void ft_big_free(t_coder **coders, int utils_const[], t_manager *manager);
-int		make_init_coders(char **argv, int utils_const[], t_coder **coders, t_manager *manager);
+void ft_big_free(t_manager *manager);
+int	make_init(t_manager *manager, char **argv);
+
 
 #endif
