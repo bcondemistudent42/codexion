@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/29 16:02:45 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/29 17:00:29 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int	assignator_coders(t_manager *manager)
 		my_coder = malloc(sizeof(t_coder));
 		if (my_coder == NULL)
 		{
+			free(manager->dongles);
 			ft_free_coders(manager->coders, i);
 			return (-1);
 		}

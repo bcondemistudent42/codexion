@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/29 16:02:03 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/29 17:04:08 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	main(int ac, char **argv)
 		printf("elt == %d, left == %d, right == %d\n", coders[j]->id, coders[j]->left->id,coders[j]->right->id);
 		j++;
 	}
-	create_thread(utils_const[NB_CODERS], manager);
+	create_thread(manager);
 	ft_big_free(manager);
 }
 

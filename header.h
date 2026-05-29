@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/29 16:02:21 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/29 16:48:19 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <sys/time.h>
 # include <pthread.h>
 
 typedef struct s_coder	t_coder;
@@ -93,7 +94,7 @@ struct	s_coder
 
 int		ft_error(void);
 int		allocation_error(void);
-int	create_thread(int nb_thread, t_manager *manager);
+int	create_thread(t_manager *manager);
 int		parser_manager(int ac, char **argv);
 void	ft_free_coders(t_coder **coders, int index_to_stop);
 int free_coder_and_manager(t_coder **coders, t_manager *manager);

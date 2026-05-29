@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/29 16:01:08 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/29 16:52:43 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void my_function(void *manager);
 int make_thread_join(t_manager *manager, int index);
 
-int	create_thread(int nb_thread, t_manager *manager)
+int	create_thread(t_manager *manager)
 {
 	int i;
 
@@ -59,12 +59,15 @@ void my_function(void *my_coder)
 	if (coder->manager->nb_ready == coder->manager->utils_const[NB_CODERS])
 		pthread_cond_signal(&coder->manager->manager_sleep); // wake up main and make it launch all thread
 	pthread_mutex_unlock(&coder->manager->mutex_manager);
-	// to do a function wait until ready
 
 	// starting true job of the thread, mutex to protect the values
 	pthread_mutex_lock(&coder->manager->start_ready_mtx);
 	pthread_cond_wait(&coder->manager->start_cond, &coder->manager->start_ready_mtx);
-	printf("Created thread for coder: %d\n", coder->id);
+	// printf("Created thread for coder: %d\n", coder->id);
+	if ((coder->left->available) || (coder->right->available))
+	{
+		printf("OK\n");
+	}
 	// to do the algorythm
 	// checking if dongle available 	
 	// compile 
