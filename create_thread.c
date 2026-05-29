@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/28 18:45:42 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/05/29 10:39:51 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	create_thread(int nb_thread, t_manager *manager)
 	while (manager->nb_ready < manager->utils_const[NB_CODERS])
 		pthread_cond_wait(&manager->manager_sleep, &manager->mutex_manager);
 	pthread_mutex_unlock(&manager->mutex_manager);
+	pthread_mutex_lock(&manager->start_ready_mtx);
 	pthread_cond_broadcast(&manager->start_cond);
+	pthread_mutex_unlock(&manager->start_ready_mtx);
+
 	make_thread_join(manager);
 	return (0);
 }
@@ -47,18 +50,18 @@ void my_function(void *my_coder)
 	if (coder->manager->nb_ready == coder->manager->utils_const[NB_CODERS])
 		pthread_cond_signal(&coder->manager->manager_sleep); // wake up main and make it launch all thread
 	pthread_mutex_unlock(&coder->manager->mutex_manager);
+	// to do a function wait until ready
 
 	// starting true job of the thread, mutex to protect the values
 	pthread_mutex_lock(&coder->manager->start_ready_mtx);
 	pthread_cond_wait(&coder->manager->start_cond, &coder->manager->start_ready_mtx);
 	printf("Created thread for coder: %d\n", coder->id);
+	// to do the algorythm
 	// checking if dongle available 	
 	// compile 
 	// debug 
 	// refacto
 	pthread_mutex_unlock(&coder->manager->start_ready_mtx);
-	
-
 }
 
 
