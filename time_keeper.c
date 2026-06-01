@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 16:23:50 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/01 10:44:41 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/01 11:29:01 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,10 @@
 
 long long get_time()
 {
-	long long result_ms;
 	struct timeval start;
 
-    if (gettimeofday(&start, NULL) != 0) {
-        printf("gettimeofday start failed");
-        return (-1);
-    }
-	result_ms = ((long long)start.tv_sec * 1000) + (start.tv_usec / 1000);
-	return (result_ms);
+	gettimeofday(&start, NULL);
+	return (((long long)start.tv_sec * 1000) + (start.tv_usec / 1000));
 }
 
 
@@ -39,3 +34,8 @@ void ft_set_coders_time(t_manager *manager)
 	}
 	pthread_mutex_unlock(&manager->var_mutex);
 }
+
+// long long get_diff_time(long long actual_time, t_manager manager)
+// {
+	
+// }

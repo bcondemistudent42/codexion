@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/01 10:55:24 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/01 11:31:09 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,4 @@ int	main(int ac, char **argv)
 
 // to do the monitor stuff to handle each coder and time correctly
 // to clean all mutexes after uses
-// to test when breaking all malloc if leaks at the end
 

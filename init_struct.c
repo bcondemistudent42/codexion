@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/01 10:54:10 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/01 11:21:50 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	init_coder(int index, t_manager *manager)
 	manager->coders[index]->nb_dongle = 1;
 	manager->coders[index]->compile_cnt = 0;
 	manager->coders[index]->utils_const = manager->utils_const;
-	manager->coders[index]->last_compile = -1; //to see which value to init
+	manager->coders[index]->last_compile = 0;
 	if (index == 0)
 	{
 		manager->coders[index]->left = &manager->dongles[manager->utils_const[NB_CODERS] - 1];
