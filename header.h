@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/29 16:48:19 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/01 10:44:57 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,12 @@ typedef struct s_Manager
 	t_dongle	*dongles;
 	int	*utils_const;
 	int	nb_ready;
+	long long time_start;
 	pthread_cond_t manager_sleep;
 	pthread_mutex_t mutex_manager;
 	pthread_cond_t start_cond;
 	pthread_mutex_t start_ready_mtx;
+	pthread_mutex_t var_mutex;
 }	t_manager;
 
 
@@ -93,6 +95,8 @@ struct	s_coder
 
 
 int		ft_error(void);
+long long get_time();
+void ft_set_coders_time(t_manager *manager);
 int		allocation_error(void);
 int	create_thread(t_manager *manager);
 int		parser_manager(int ac, char **argv);

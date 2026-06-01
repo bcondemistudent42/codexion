@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/29 17:04:08 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/01 10:55:24 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int ac, char **argv)
 		return (ft_error());
 	coders = malloc(sizeof(t_coder *) * atoi(argv[1]));
 	if (coders == NULL)
-		return (allocation_error()); // first malloc so nothing to free
+		return (allocation_error());
 	manager = malloc(sizeof(t_manager));
 	if (manager == NULL)
 		return (free_coder_and_manager(coders, manager));
@@ -36,19 +36,17 @@ int	main(int ac, char **argv)
 	if (make_init(manager, argv) == -1)
 		return (free_coder_and_manager(coders, manager));
 
-
+	create_thread(manager);
 	int j = 0;
+	printf("Time == %lld\n", manager->time_start);
 	while (j < utils_const[NB_CODERS])
 	{
-		printf("elt == %d, left == %d, right == %d\n", coders[j]->id, coders[j]->left->id,coders[j]->right->id);
+		printf("elt == %d, left == %d, right == %d, time == %lld\n", coders[j]->id, coders[j]->left->id,coders[j]->right->id, coders[j]->last_compile);
 		j++;
 	}
-	create_thread(manager);
 	ft_big_free(manager);
-}
+	}
 
-// to link dongles to coders
-// to do create thread and my_function work correctly
 // to do the monitor stuff to handle each coder and time correctly
 // to clean all mutexes after uses
 // to test when breaking all malloc if leaks at the end

@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/29 17:00:29 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/01 10:54:10 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	make_init(t_manager *manager, char **argv)
 	pthread_cond_init(&manager->start_cond, NULL); // to destroy at end
 	pthread_mutex_init(&manager->mutex_manager, NULL); // to destroy at end
 	pthread_mutex_init(&manager->start_ready_mtx, NULL); // to destroy at end
+	pthread_mutex_init(&manager->var_mutex, NULL); // to destroy at end
 	return (0);
 }
 

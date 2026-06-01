@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/05/29 16:52:43 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/01 10:51:53 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	create_thread(t_manager *manager)
 	while (manager->nb_ready < manager->utils_const[NB_CODERS])
 		pthread_cond_wait(&manager->manager_sleep, &manager->mutex_manager);
 	pthread_mutex_unlock(&manager->mutex_manager);
+	manager->time_start = get_time();
+	ft_set_coders_time(manager);
 	pthread_mutex_lock(&manager->start_ready_mtx);
 	pthread_cond_broadcast(&manager->start_cond);
 	pthread_mutex_unlock(&manager->start_ready_mtx);

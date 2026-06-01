@@ -22,7 +22,7 @@ clean:
 	rm -rf obj/
 
 fclean: clean
-	rm -f $(NAME) malloc_test
+	rm -f $(NAME)
 
 re: fclean all
 
