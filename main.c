@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/01 11:31:09 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/01 19:37:25 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,19 @@ int	main(int ac, char **argv)
 		return (free_coder_and_manager(coders, manager));
 
 	create_thread(manager);
-	int j = 0;
-	printf("Time == %lld\n", manager->time_start);
-	while (j < utils_const[NB_CODERS])
-	{
-		printf("elt == %d, left == %d, right == %d, time == %lld\n", coders[j]->id, coders[j]->left->id,coders[j]->right->id, coders[j]->last_compile);
-		j++;
-	}
 	ft_big_free(manager);
 	}
+	
+	// to do the monitor stuff to handle each coder and time correctly
+	// to clean all mutexes after uses
+	
+	// int j = 0;
+	// printf("Time == %lld\n", manager->time_start);
+	// while (j < utils_const[NB_CODERS])
+	// {
+	// printf("elt == %d, left == %d, right == %d, time == %lld\n", coders[j]->id, coders[j]->left->id,coders[j]->right->id, coders[j]->last_compile);
+	// j++;
+// }
 
-// to do the monitor stuff to handle each coder and time correctly
-// to clean all mutexes after uses
 
+// to protect printf ask antoine

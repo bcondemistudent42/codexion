@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/01 11:21:50 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/01 20:19:27 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	make_init(t_manager *manager, char **argv)
 	pthread_mutex_init(&manager->mutex_manager, NULL); // to destroy at end
 	pthread_mutex_init(&manager->start_ready_mtx, NULL); // to destroy at end
 	pthread_mutex_init(&manager->var_mutex, NULL); // to destroy at end
+		pthread_mutex_init(&manager->dongle_mutex, NULL);
+	pthread_mutex_init(&manager->print_mutex, NULL);
 	return (0);
 }
 
@@ -118,9 +120,10 @@ void init_dongle(t_manager *manager)
 	while (i < manager->utils_const[NB_CODERS])
 	{
 		manager->dongles[i].id = i + 1;
-		manager->dongles[i].last_used = -1; //to see if -1 is good value
+		manager->dongles[i].last_used = 0; //to see if -1 is good value
 		manager->dongles[i].available = TRUE;
 		manager->dongles[i].utils_const = manager->utils_const;
+		manager->dongles[i].queue_size = 0;
 		i++;
 	}
 }

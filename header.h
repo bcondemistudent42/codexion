@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/01 10:44:57 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/01 20:19:04 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,13 @@
 # include <pthread.h>
 
 typedef struct s_coder	t_coder;
+
+// typedef struct	s_hp_elt
+// {
+	// int			id;
+	// long long	last_compile;
+// }	t_hp_elt; to which solution to choose
+
 
 typedef enum State
 {
@@ -51,6 +58,8 @@ typedef struct s_dongle
 {
 	int	id;
 	long long last_used;
+	int queue[2];
+	int queue_size;
 	t_bool available;
 	int	*utils_const;
 }	t_dongle;
@@ -67,6 +76,8 @@ typedef struct s_Manager
 	pthread_mutex_t mutex_manager;
 	pthread_cond_t start_cond;
 	pthread_mutex_t start_ready_mtx;
+	pthread_mutex_t dongle_mutex;
+	pthread_mutex_t print_mutex;
 	pthread_mutex_t var_mutex;
 }	t_manager;
 
