@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 15:11:08 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 19:02:20 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,18 @@ int make_thread_join(t_manager *manager, int index);
 
 // temp declaration :
 int can_compile(t_coder *coder);
-void take_dongle(t_dongle *dongle, long long time_dongle_taken, int coder_id);
 void delete_coder_queue(t_coder *coder);
-void release_dongle(t_coder *coder);
 
 // v2 temp
+void take_dongle(t_dongle *dongle, long long time_dongle_taken, t_coder *coder);
+void release_dongle(t_dongle *dongle, long long time_release);
+void swap_priority(int queue[2]);
 void	wait_for_start(t_coder *coder);
 void launch_thread(t_manager *manager);
 int can_compile(t_coder *coder);
 void	take_both_dongle(t_coder *coder);
 int	check_dongle(t_dongle *dongle, long long request_time, int coder_id);
+void release_both_dongle(t_coder *coder);
 
 int	create_thread(t_manager *manager)
 {
@@ -71,6 +73,12 @@ void my_function(void *my_coder)
 		if (can_compile(coder) == TRUE)
 		{
 			take_both_dongle(coder);
+			pthread_mutex_lock(&coder->manager->mutex_print);
+			printf("%lld %d is compiling\n",get_time() - coder->utils_const[TM_START], coder->id);
+			pthread_mutex_unlock(&coder->manager->mutex_print);
+			usleep(coder->utils_const[TM_COMPILE]);
+			release_both_dongle(coder);
+			coder->compile_cnt++;
 		}
 	}
 }
@@ -139,12 +147,15 @@ int can_compile(t_coder *coder)
 }
 
 
-void take_dongle(t_dongle *dongle, long long time_dongle_taken, int coder_id)
+void take_dongle(t_dongle *dongle, long long time_dongle_taken, t_coder *coder)
 {
 	pthread_mutex_lock(&dongle->dongle_mtx);
 	dongle->available = FALSE;
-	dongle->last_time_used = time_dongle_taken;
-	printf("%lld %d has taken a dongle\n", dongle->utils_const[TM_START] - get_time(), coder_id);
+	(void)time_dongle_taken;
+	// dongle->last_time_used = time_dongle_taken; // to see if do now or when release
+	pthread_mutex_lock(&coder->manager->mutex_print);
+	printf("%lld %d has taken a dongle\n", get_time() - dongle->utils_const[TM_START], coder->id);
+	pthread_mutex_unlock(&coder->manager->mutex_print);
 	pthread_mutex_unlock(&dongle->dongle_mtx);
 }
 
@@ -153,8 +164,8 @@ void	take_both_dongle(t_coder *coder)
 	long long time_took_dongle;
 
 	time_took_dongle = get_time();
-	take_dongle(coder->left, time_took_dongle, coder->id);
-	take_dongle(coder->right, time_took_dongle, coder->id);
+	take_dongle(coder->left, time_took_dongle, coder);
+	take_dongle(coder->right, time_took_dongle, coder);
 }
 
 
@@ -164,23 +175,45 @@ void	take_both_dongle(t_coder *coder)
 
 // }
 
-// void release_dongle(t_coder *coder)
-// {
+void release_dongle(t_dongle *dongle, long long time_release)
+{
+	pthread_mutex_lock(&dongle->dongle_mtx);
+	dongle->last_time_used = time_release; // to see if do now or when release
+	dongle->available = TRUE;
+	swap_priority(dongle->queue);
+	pthread_mutex_unlock(&dongle->dongle_mtx);
+}
 
-// }
+
+void release_both_dongle(t_coder *coder)
+{
+	long long time_released;
+
+	time_released = get_time();
+	release_dongle(coder->left, time_released);
+	release_dongle(coder->right, time_released);
+}
+
+
+
+
+void swap_priority(int queue[2])
+{
+	int temp;
+
+	temp = queue[0];
+	queue[0] = queue[1];
+	queue[1] = temp;
+}
 
 
 int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
 {
 	if (dongle->available == FALSE)
 		return (FALSE);
-	if (request_time - dongle->last_time_used < dongle->utils_const[DONGLE_COOLDOWN])
+	if (request_time - dongle->last_time_used - dongle->utils_const[TM_COMPILE] < dongle->utils_const[DONGLE_COOLDOWN])
 		return (FALSE);
 	if (dongle->queue[0] != coder_id)
-	{
-		printf("coder_id %d, dongle_id %d\n", coder_id, dongle->id);
-		printf("dongle_queu [%d, %d]\n", dongle->queue[0], dongle->queue[1]);
 		return (FALSE);
-	}
 	return (TRUE);
 }

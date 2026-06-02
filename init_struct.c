@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 14:52:05 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 18:45:07 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,10 +153,10 @@ void init_dongle(t_manager *manager)
 		}
 		i++;
 	}
-	i = 0;
-	while (i < manager->utils_const[NB_CODERS])
-	{
-		printf("Dongle %d ;[%d, %d]\n", manager->dongles[i].id, manager->dongles[i].queue[0], manager->dongles[i].queue[1]);
-		i++;
-	}
+	// i = 0;
+	// while (i < manager->utils_const[NB_CODERS])
+	// {
+		// printf("Dongle %d ;[%d, %d]\n", manager->dongles[i].id, manager->dongles[i].queue[0], manager->dongles[i].queue[1]);
+		// i++;
+	// }
 }

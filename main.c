@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 15:04:48 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 18:44:57 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	main(int ac, char **argv)
 	manager->dongles = dongles;
 	if (make_init(manager, argv) == -1)
 		return (free_coder_and_manager(coders, manager));
-		
 	create_thread(manager);
 	ft_big_free(manager);
 	}
