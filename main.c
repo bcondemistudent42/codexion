@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/01 19:37:25 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 14:53:20 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	main(int ac, char **argv)
 	manager->dongles = dongles;
 	if (make_init(manager, argv) == -1)
 		return (free_coder_and_manager(coders, manager));
-
+		
 	create_thread(manager);
 	ft_big_free(manager);
 	}
@@ -43,13 +43,13 @@ int	main(int ac, char **argv)
 	// to do the monitor stuff to handle each coder and time correctly
 	// to clean all mutexes after uses
 	
+	
+	
+	// to protect printf ask antoine
 	// int j = 0;
-	// printf("Time == %lld\n", manager->time_start);
-	// while (j < utils_const[NB_CODERS])
+	// // printf("Time == %lld\n", manager->time_start);
+	// // // while (j < utils_const[NB_CODERS])
 	// {
-	// printf("elt == %d, left == %d, right == %d, time == %lld\n", coders[j]->id, coders[j]->left->id,coders[j]->right->id, coders[j]->last_compile);
-	// j++;
+	// // // printf("elt == %d, left == %d, right == %d, time == %lld\n", coders[j]->id, coders[j]->left->id,coders[j]->right->id, coders[j]->last_compile);
+	// // j++;
 // }
-
-
-// to protect printf ask antoine

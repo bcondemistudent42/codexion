@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 12:14:39 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 14:45:33 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,14 @@ void my_function(void *my_coder)
 	// printf("Created thread %d at time %lld\n", coder->id, get_time());
 	// pthread_mutex_unlock(&coder->manager->mutex_print);
 	// to see if using mutex print
-	while (coder->compile_cnt < coder->utils_const[COMPILE_REQUIRED])
+	if (coder->id % 2 == 0)
+		usleep(2000);
+	while (coder	->compile_cnt < coder->utils_const[COMPILE_REQUIRED])
 	{
 		// must init the queue of dongles before, so like this pass the can compile stuff
-		printf("Coder: %d at time %lld can compile %d\n", coder->id, get_time(), can_compile(coder));
+		printf("Coder: %d at time %lld can compile %d\n", coder->id, get_time() - coder->manager->time_start, can_compile(coder));
 		coder->compile_cnt++;
+		usleep(500);
 	}
 }
 
@@ -108,6 +111,7 @@ void	wait_for_start(t_coder *coder)
 void launch_thread(t_manager *manager)
 {
 	pthread_mutex_lock(&manager->protect_nb_ready);
+	manager->time_start = get_time();
 	while (manager->nb_ready < manager->utils_const[NB_CODERS])
 		pthread_cond_wait(&manager->cond_ready, &manager->protect_nb_ready);
 	manager->check_ready = TRUE;
@@ -123,8 +127,16 @@ int can_compile(t_coder *coder)
 	long long request_time;
 
 	request_time = get_time();
+	pthread_mutex_lock(&coder->left->dongle_mtx);
 	left = check_dongle(coder->left, request_time, coder->id);
+	pthread_mutex_unlock(&coder->left->dongle_mtx);
+	
+	pthread_mutex_lock(&coder->right->dongle_mtx);
 	right = check_dongle(coder->right, request_time, coder->id);
+	pthread_mutex_unlock(&coder->right->dongle_mtx);
+
+	printf("left == %d, right == %d\n", left, right);
+	printf("\n");
 	if (left == TRUE && right == TRUE)
 		return (TRUE);
 	return (FALSE);
@@ -157,22 +169,15 @@ int can_compile(t_coder *coder)
 
 int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
 {
-	pthread_mutex_lock(&dongle->dongle_mtx);
 	if (dongle->available == FALSE)
-	{
-		pthread_mutex_unlock(&dongle->dongle_mtx);
 		return (FALSE);
-	}
-	if (dongle->last_time_used - request_time < dongle->utils_const[DONGLE_COOLDOWN])
-	{
-		pthread_mutex_unlock(&dongle->dongle_mtx);
+	if (request_time - dongle->last_time_used < dongle->utils_const[DONGLE_COOLDOWN])
 		return (FALSE);
-	}
 	if (dongle->queue[0] != coder_id)
 	{
-		pthread_mutex_unlock(&dongle->dongle_mtx);
+		printf("coder_id %d, dongle_id %d\n", coder_id, dongle->id);
+		printf("dongle_queu [%d, %d]\n", dongle->queue[0], dongle->queue[1]);
 		return (FALSE);
 	}
-	pthread_mutex_unlock(&dongle->dongle_mtx);
 	return (TRUE);
 }

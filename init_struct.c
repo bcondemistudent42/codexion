@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 11:54:12 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 14:52:05 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,17 +87,17 @@ void	init_coder(int index, t_manager *manager)
 	if (index == 0)
 	{
 		manager->coders[index]->left = &manager->dongles[manager->utils_const[NB_CODERS] - 1];
-		manager->coders[index]->right = &manager->dongles[index + 1];
+		manager->coders[index]->right = &manager->dongles[index];
 	}
-	else if (index + 1 >= manager->utils_const[NB_CODERS])
+	else if (index + 1 == manager->utils_const[NB_CODERS])
 	{
 		manager->coders[index]->left = &manager->dongles[index - 1];
-		manager->coders[index]->right = &manager->dongles[0];
+		manager->coders[index]->right = &manager->dongles[index];
 	}
 	else
 	{
 		manager->coders[index]->left = &manager->dongles[index - 1];
-		manager->coders[index]->right = &manager->dongles[index + 1];
+		manager->coders[index]->right = &manager->dongles[index];
 	}
 	manager->coders[index]->state = INACTIVE;
 }
@@ -126,7 +126,37 @@ void init_dongle(t_manager *manager)
 		manager->dongles[i].last_time_used = 0; //to see if -1 is good value
 		manager->dongles[i].available = TRUE;
 		manager->dongles[i].utils_const = manager->utils_const;
-		manager->dongles[i].queue_size = 0;
+		// testting this part
+		manager->dongles[i].queue_size = 2;
+		if (i == 0)
+		{
+			manager->dongles[i].queue[0] = 1;
+			manager->dongles[i].queue[1] = 2;
+		}
+		else if (i ==  manager->utils_const[NB_CODERS] - 1)
+		{
+			manager->dongles[i].queue[0] = 1;
+			manager->dongles[i].queue[1] = i + 1;
+		}
+		else
+		{
+			if (i % 2 == 1)
+			{
+				manager->dongles[i].queue[1] = i + 1;
+				manager->dongles[i].queue[0] = i + 2;
+			}
+			else
+			{
+				manager->dongles[i].queue[0] = i + 1;
+				manager->dongles[i].queue[1] = i + 2;
+			}
+		}
+		i++;
+	}
+	i = 0;
+	while (i < manager->utils_const[NB_CODERS])
+	{
+		printf("Dongle %d ;[%d, %d]\n", manager->dongles[i].id, manager->dongles[i].queue[0], manager->dongles[i].queue[1]);
 		i++;
 	}
 }
