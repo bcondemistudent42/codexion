@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 11:02:45 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 11:54:12 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	init_coder(int index, t_manager *manager)
 {
 	manager->coders[index]->manager = manager;
 	manager->coders[index]->id = index + 1;
-	manager->coders[index]->nb_dongle = 1;
 	manager->coders[index]->compile_cnt = 0;
 	manager->coders[index]->utils_const = manager->utils_const;
 	manager->coders[index]->last_compile = 0;
@@ -123,6 +122,7 @@ void init_dongle(t_manager *manager)
 	while (i < manager->utils_const[NB_CODERS])
 	{
 		manager->dongles[i].id = i + 1;
+		pthread_mutex_init(&manager->dongles[i].dongle_mtx, NULL);
 		manager->dongles[i].last_time_used = 0; //to see if -1 is good value
 		manager->dongles[i].available = TRUE;
 		manager->dongles[i].utils_const = manager->utils_const;

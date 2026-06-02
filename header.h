@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 11:02:37 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 11:15:34 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_dongle
 	int queue[2];
 	int queue_size;
 	t_bool available;
+	pthread_mutex_t dongle_mtx;
 	int	*utils_const;
 }	t_dongle;
 
@@ -92,7 +93,6 @@ typedef enum e_scheduler
 struct	s_coder
 {
 	int			id;
-	int			nb_dongle;
 	int			compile_cnt;
 	int			*utils_const;
 	long long	last_compile;
