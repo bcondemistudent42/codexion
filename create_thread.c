@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 19:02:20 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 21:06:19 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@ int make_thread_join(t_manager *manager, int index);
 
 
 // temp declaration :
-int can_compile(t_coder *coder);
-void delete_coder_queue(t_coder *coder);
 
-// v2 temp
+int can_compile(t_coder *coder);
 void take_dongle(t_dongle *dongle, long long time_dongle_taken, t_coder *coder);
 void release_dongle(t_dongle *dongle, long long time_release);
 void swap_priority(int queue[2]);
@@ -60,26 +58,36 @@ void my_function(void *my_coder)
 
 	coder = (t_coder*)(my_coder);
 	wait_for_start(coder);
-	// printf("Started thread %d at time %lld\n", coder->id, get_time());
-	// pthread_mutex_lock(&coder->manager->mutex_print);
-	// printf("Created thread %d at time %lld\n", coder->id, get_time());
-	// pthread_mutex_unlock(&coder->manager->mutex_print);
-	// to see if using mutex print
 	if (coder->id % 2 == 0)
-		usleep(2000);
+		usleep(1000);
 	while (coder->compile_cnt < coder->utils_const[COMPILE_REQUIRED])
 	{
-		// must init the queue of dongles before, so like this pass the can compile stuff
 		if (can_compile(coder) == TRUE)
 		{
 			take_both_dongle(coder);
 			pthread_mutex_lock(&coder->manager->mutex_print);
 			printf("%lld %d is compiling\n",get_time() - coder->utils_const[TM_START], coder->id);
 			pthread_mutex_unlock(&coder->manager->mutex_print);
-			usleep(coder->utils_const[TM_COMPILE]);
+			
+			usleep(coder->utils_const[TM_COMPILE] * 1000);
 			release_both_dongle(coder);
+
+			pthread_mutex_lock(&coder->manager->mutex_print);
+			printf("%lld %d is debugging\n",get_time() - coder->utils_const[TM_START], coder->id);
+			pthread_mutex_unlock(&coder->manager->mutex_print);
+
+			usleep(coder->utils_const[TM_DEBUG] * 1000);
+
+			pthread_mutex_lock(&coder->manager->mutex_print);
+			printf("%lld %d is refactoring\n",get_time() - coder->utils_const[TM_START], coder->id);
+			pthread_mutex_unlock(&coder->manager->mutex_print);
+
+			usleep(coder->utils_const[TM_REFACTO]* 1000);
+
 			coder->compile_cnt++;
 		}
+		else
+			usleep(1000);
 	}
 }
 
@@ -143,7 +151,6 @@ int can_compile(t_coder *coder)
 	if (left == TRUE && right == TRUE)
 		return (TRUE);
 	return (FALSE);
-	// to call for left and right
 }
 
 
@@ -151,8 +158,7 @@ void take_dongle(t_dongle *dongle, long long time_dongle_taken, t_coder *coder)
 {
 	pthread_mutex_lock(&dongle->dongle_mtx);
 	dongle->available = FALSE;
-	(void)time_dongle_taken;
-	// dongle->last_time_used = time_dongle_taken; // to see if do now or when release
+	(void)time_dongle_taken; // to delete later
 	pthread_mutex_lock(&coder->manager->mutex_print);
 	printf("%lld %d has taken a dongle\n", get_time() - dongle->utils_const[TM_START], coder->id);
 	pthread_mutex_unlock(&coder->manager->mutex_print);
@@ -168,16 +174,10 @@ void	take_both_dongle(t_coder *coder)
 	take_dongle(coder->right, time_took_dongle, coder);
 }
 
-
-
-// void delete_coder_queue(t_coder *coder)
-// {
-
-// }
-
 void release_dongle(t_dongle *dongle, long long time_release)
 {
 	pthread_mutex_lock(&dongle->dongle_mtx);
+	(void)(time_release);
 	dongle->last_time_used = time_release; // to see if do now or when release
 	dongle->available = TRUE;
 	swap_priority(dongle->queue);
@@ -194,9 +194,6 @@ void release_both_dongle(t_coder *coder)
 	release_dongle(coder->right, time_released);
 }
 
-
-
-
 void swap_priority(int queue[2])
 {
 	int temp;
@@ -211,9 +208,21 @@ int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
 {
 	if (dongle->available == FALSE)
 		return (FALSE);
-	if (request_time - dongle->last_time_used - dongle->utils_const[TM_COMPILE] < dongle->utils_const[DONGLE_COOLDOWN])
+	if (dongle->last_time_used + dongle->utils_const[DONGLE_COOLDOWN] > request_time)
 		return (FALSE);
 	if (dongle->queue[0] != coder_id)
 		return (FALSE);
 	return (TRUE);
 }
+
+
+// DONGLE_COOLDOWN = 1
+// 1-2-3-4-5-6-7-8-9-10-11-12-13-14-15
+	// l o   r
+	// a o   e
+	// s o   q
+	// t o   u
+	// u o   e
+	// s o   s
+	// e o   t
+	// d   
