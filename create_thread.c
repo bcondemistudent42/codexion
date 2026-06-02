@@ -6,38 +6,21 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 21:06:19 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 21:48:21 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-
-void my_function(void *manager);
-int make_thread_join(t_manager *manager, int index);
-
-
-// temp declaration :
-
-int can_compile(t_coder *coder);
-void take_dongle(t_dongle *dongle, long long time_dongle_taken, t_coder *coder);
-void release_dongle(t_dongle *dongle, long long time_release);
-void swap_priority(int queue[2]);
-void	wait_for_start(t_coder *coder);
-void launch_thread(t_manager *manager);
-int can_compile(t_coder *coder);
-void	take_both_dongle(t_coder *coder);
-int	check_dongle(t_dongle *dongle, long long request_time, int coder_id);
-void release_both_dongle(t_coder *coder);
-
 int	create_thread(t_manager *manager)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < manager->utils_const[NB_CODERS])
 	{
-		if (pthread_create(&manager->coders[i]->thread_id, NULL, (void *) my_function, manager->coders[i]) != 0)
+		if (pthread_create(&manager->coders[i]->thread_id, NULL,
+				(void *) my_function, manager->coders[i]) != 0)
 		{
 			// to handle this error case later, delete mutex and everything
 			// to see with Adrien on monday
@@ -51,12 +34,11 @@ int	create_thread(t_manager *manager)
 	return (0);
 }
 
-
-void my_function(void *my_coder)
+void	my_function(void *my_coder)
 {
-	t_coder *coder;
+	t_coder	*coder;
 
-	coder = (t_coder*)(my_coder);
+	coder = (t_coder *)(my_coder);
 	wait_for_start(coder);
 	if (coder->id % 2 == 0)
 		usleep(1000);
@@ -66,20 +48,23 @@ void my_function(void *my_coder)
 		{
 			take_both_dongle(coder);
 			pthread_mutex_lock(&coder->manager->mutex_print);
-			printf("%lld %d is compiling\n",get_time() - coder->utils_const[TM_START], coder->id);
+			printf("%lld %d is compiling\n",
+				get_time() - coder->utils_const[TM_START], coder->id);
 			pthread_mutex_unlock(&coder->manager->mutex_print);
-			
+
 			usleep(coder->utils_const[TM_COMPILE] * 1000);
 			release_both_dongle(coder);
 
 			pthread_mutex_lock(&coder->manager->mutex_print);
-			printf("%lld %d is debugging\n",get_time() - coder->utils_const[TM_START], coder->id);
+			printf("%lld %d is debugging\n",
+					get_time() - coder->utils_const[TM_START], coder->id);
 			pthread_mutex_unlock(&coder->manager->mutex_print);
 
 			usleep(coder->utils_const[TM_DEBUG] * 1000);
 
 			pthread_mutex_lock(&coder->manager->mutex_print);
-			printf("%lld %d is refactoring\n",get_time() - coder->utils_const[TM_START], coder->id);
+			printf("%lld %d is refactoring\n",
+				get_time() - coder->utils_const[TM_START], coder->id);
 			pthread_mutex_unlock(&coder->manager->mutex_print);
 
 			usleep(coder->utils_const[TM_REFACTO]* 1000);
@@ -87,14 +72,13 @@ void my_function(void *my_coder)
 			coder->compile_cnt++;
 		}
 		else
-			usleep(1000);
+			usleep(100); // to see if good solution
 	}
 }
 
-
-int make_thread_join(t_manager *manager, int index)
+int	make_thread_join(t_manager *manager, int index)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < index)
@@ -106,22 +90,19 @@ int make_thread_join(t_manager *manager, int index)
 	return (0);
 }
 
-
-
 void	wait_for_start(t_coder *coder)
 {
 	pthread_mutex_lock(&coder->manager->protect_nb_ready);
 	coder->manager->nb_ready++;
 	if (coder->manager->nb_ready == coder->utils_const[NB_CODERS])
-	pthread_cond_signal(&coder->manager->cond_ready);
-	
+		pthread_cond_signal(&coder->manager->cond_ready);
 	while (coder->manager->check_ready == FALSE)
-		pthread_cond_wait(&coder->manager->routine_wait_start, &coder->manager->protect_nb_ready);
+		pthread_cond_wait(&coder->manager->routine_wait_start,
+			&coder->manager->protect_nb_ready);
 	pthread_mutex_unlock(&coder->manager->protect_nb_ready);
 }
 
-
-void launch_thread(t_manager *manager)
+void	launch_thread(t_manager *manager)
 {
 	pthread_mutex_lock(&manager->protect_nb_ready);
 	manager->utils_const[TM_START] = get_time();
@@ -132,46 +113,42 @@ void launch_thread(t_manager *manager)
 	pthread_mutex_unlock(&manager->protect_nb_ready);
 }
 
-
-int can_compile(t_coder *coder)
+int	can_compile(t_coder *coder)
 {
-	int left;
-	int right;
-	long long request_time;
+	int			left;
+	int			right;
+	long long	request_time;
 
 	request_time = get_time();
 	pthread_mutex_lock(&coder->left->dongle_mtx);
 	left = check_dongle(coder->left, request_time, coder->id);
 	pthread_mutex_unlock(&coder->left->dongle_mtx);
-	
 	pthread_mutex_lock(&coder->right->dongle_mtx);
 	right = check_dongle(coder->right, request_time, coder->id);
 	pthread_mutex_unlock(&coder->right->dongle_mtx);
-
 	if (left == TRUE && right == TRUE)
 		return (TRUE);
 	return (FALSE);
 }
 
-
-void take_dongle(t_dongle *dongle, long long time_dongle_taken, t_coder *coder)
+void take_dongle(t_dongle *dongle, t_coder *coder)
 {
 	pthread_mutex_lock(&dongle->dongle_mtx);
 	dongle->available = FALSE;
-	(void)time_dongle_taken; // to delete later
 	pthread_mutex_lock(&coder->manager->mutex_print);
-	printf("%lld %d has taken a dongle\n", get_time() - dongle->utils_const[TM_START], coder->id);
+	printf("%lld %d has taken a dongle\n",
+		get_time() - dongle->utils_const[TM_START], coder->id);
 	pthread_mutex_unlock(&coder->manager->mutex_print);
 	pthread_mutex_unlock(&dongle->dongle_mtx);
 }
 
 void	take_both_dongle(t_coder *coder)
 {
-	long long time_took_dongle;
+	long long	time_took_dongle;
 
 	time_took_dongle = get_time();
-	take_dongle(coder->left, time_took_dongle, coder);
-	take_dongle(coder->right, time_took_dongle, coder);
+	take_dongle(coder->left, coder);
+	take_dongle(coder->right, coder);
 }
 
 void release_dongle(t_dongle *dongle, long long time_release)
@@ -184,7 +161,6 @@ void release_dongle(t_dongle *dongle, long long time_release)
 	pthread_mutex_unlock(&dongle->dongle_mtx);
 }
 
-
 void release_both_dongle(t_coder *coder)
 {
 	long long time_released;
@@ -194,27 +170,28 @@ void release_both_dongle(t_coder *coder)
 	release_dongle(coder->right, time_released);
 }
 
-void swap_priority(int queue[2])
+void	swap_priority(int queue[2])
 {
-	int temp;
+	int	temp;
 
 	temp = queue[0];
 	queue[0] = queue[1];
 	queue[1] = temp;
 }
 
-
 int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
 {
+	int	free_at;
+
+	free_at = dongle->last_time_used + dongle->utils_const[DONGLE_COOLDOWN];
 	if (dongle->available == FALSE)
 		return (FALSE);
-	if (dongle->last_time_used + dongle->utils_const[DONGLE_COOLDOWN] > request_time)
+	if (free_at > request_time)
 		return (FALSE);
 	if (dongle->queue[0] != coder_id)
 		return (FALSE);
 	return (TRUE);
 }
-
 
 // DONGLE_COOLDOWN = 1
 // 1-2-3-4-5-6-7-8-9-10-11-12-13-14-15

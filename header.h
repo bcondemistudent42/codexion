@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 19:00:42 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 22:04:40 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,6 @@
 # include <pthread.h>
 
 typedef struct s_coder	t_coder;
-
-// typedef struct	s_hp_elt
-// {
-	// int			id;
-	// long long	last_compile;
-// }	t_hp_elt; to which solution to choose
-
 
 typedef enum State
 {
@@ -57,30 +50,28 @@ typedef enum Bool
 
 typedef struct s_dongle
 {
-	int	id;
-	long long last_time_used;
-	int queue[2];
-	int queue_size;
-	t_bool available;
-	pthread_mutex_t dongle_mtx;
-	long long	*utils_const;
+	int				id;
+	int				queue[2];
+	int				queue_size;
+	t_bool			available;
+	long long		last_time_used;
+	long long		*utils_const;
+	pthread_mutex_t	dongle_mtx;
 }	t_dongle;
-
 
 typedef struct s_Manager
 {
-	t_coder	**coders;
-	t_dongle	*dongles;
-	long long	*utils_const;
-	int	nb_ready;
-	int check_ready;
-	pthread_mutex_t protect_nb_ready;
-	pthread_mutex_t mutex_print;
-	pthread_cond_t cond_ready;
-	pthread_cond_t routine_wait_start;
+	int				nb_ready;
+	int				check_ready;
+	t_coder			**coders;
+	t_dongle		*dongles;
+	long long		*utils_const;
+	pthread_mutex_t	protect_nb_ready;
+	pthread_mutex_t	mutex_print;
+	pthread_cond_t	cond_ready;
+	pthread_cond_t	routine_wait_start;
 
 }	t_manager;
-
 
 typedef enum e_scheduler
 {
@@ -89,32 +80,55 @@ typedef enum e_scheduler
 	SCHED_EDF = 2
 }	t_scheduler;
 
-
 struct	s_coder
 {
 	int			id;
 	int			compile_cnt;
-	long long			*utils_const;
 	long long	last_compile;
-	pthread_t	thread_id;
 	t_dongle	*left;
 	t_dongle	*right;
 	t_state		state;
-	t_manager *manager;
+	t_manager	*manager;
+	pthread_t	thread_id;
+	long long	*utils_const;
 };
 
+// Init Struct
+void	assign_const(t_manager *manager, char **argv);
+void	init_dongle(t_manager *manager);
+void	init_dongle_queue(t_manager *manager, int i);
+void	loop_on_coder(t_manager *manager);
+void	init_coder(int index, t_manager *manager);
+int		assignator_coders(t_manager *manager);
+int		make_init(t_manager *manager, char **argv);
+int		init_manager(char **argv,
+			t_manager *manager, t_coder **coders, t_dongle *dongles);
 
-int		ft_error(void);
-long long get_time();
-void ft_set_coders_time(t_manager *manager);
-int		allocation_error(void);
-int	create_thread(t_manager *manager);
-int		parser_manager(int ac, char **argv);
+// Clean
+void	ft_big_free(t_manager *manager);
 void	ft_free_coders(t_coder **coders, int index_to_stop);
-int free_coder_and_manager(t_coder **coders, t_manager *manager);
-int free_coder_and_manager_with_error(t_coder **coders, t_manager *manager);
-void ft_big_free(t_manager *manager);
-int	make_init(t_manager *manager, char **argv);
+int		ft_error(void);
+int		allocation_error(void);
+int		free_coder_and_manager(t_coder **coders, t_manager *manager);
+int		free_coder_and_manager_with_error(t_coder **coders, t_manager *manager);
 
+// Thread Utils
+void	my_function(void *manager);
+void	swap_priority(int queue[2]);
+void	release_both_dongle(t_coder *coder);
+void	launch_thread(t_manager *manager);
+void	wait_for_start(t_coder *coder);
+void	take_both_dongle(t_coder *coder);
+void	take_dongle(t_dongle *dongle, t_coder *coder);
+void	release_dongle(t_dongle *dongle, long long time_release);
+int		can_compile(t_coder *coder);
+int		can_compile(t_coder *coder);
+int		create_thread(t_manager *manager);
+int		make_thread_join(t_manager *manager, int index);
+int		check_dongle(t_dongle *dongle, long long request_time, int coder_id);
+
+// other to see
+long long	get_time();
+int		parser_manager(int ac, char **argv);
 
 #endif

@@ -6,17 +6,11 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 18:45:07 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 21:52:19 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
-void	assign_const(t_manager *manager, char **argv);
-int	assignator_coders(t_manager *manager);
-void	loop_on_coder(t_manager *manager);
-void	init_coder(int index, t_manager *manager);
-void init_dongle(t_manager *manager);
 
 int	make_init(t_manager *manager, char **argv)
 {
@@ -24,12 +18,10 @@ int	make_init(t_manager *manager, char **argv)
 	pthread_mutex_init(&manager->mutex_print, NULL); // to destroy at end
 	pthread_cond_init(&manager->cond_ready, NULL); // to destroy at end
 	pthread_cond_init(&manager->routine_wait_start, NULL); // to destroy at end
-	
 	manager->nb_ready = 0;
 	manager->coders = manager->coders;
 	manager->utils_const = manager->utils_const;
 	manager->check_ready = FALSE;
-	
 	assign_const(manager, argv);
 	init_dongle(manager);
 	if (assignator_coders(manager) == -1)
@@ -38,10 +30,6 @@ int	make_init(t_manager *manager, char **argv)
 	// to handle if only 1 coder to find a solution to problem
 	// to ask he to make it burn out
 	// to see also if only two element left and right are the same to handle
-	// pthread_mutex_init(&manager->start_ready_mtx, NULL); // to destroy at end
-	// pthread_mutex_init(&manager->var_mutex, NULL); // to destroy at end
-		// pthread_mutex_init(&manager->dongle_mutex, NULL);
-	// pthread_mutex_init(&manager->print_mutex, NULL);
 	return (0);
 }
 
@@ -79,6 +67,9 @@ int	assignator_coders(t_manager *manager)
 
 void	init_coder(int index, t_manager *manager)
 {
+	t_dongle	*norm;
+
+	norm = &manager->dongles[manager->utils_const[NB_CODERS] - 1];
 	manager->coders[index]->manager = manager;
 	manager->coders[index]->id = index + 1;
 	manager->coders[index]->compile_cnt = 0;
@@ -86,7 +77,7 @@ void	init_coder(int index, t_manager *manager)
 	manager->coders[index]->last_compile = 0;
 	if (index == 0)
 	{
-		manager->coders[index]->left = &manager->dongles[manager->utils_const[NB_CODERS] - 1];
+		manager->coders[index]->left = norm;
 		manager->coders[index]->right = &manager->dongles[index];
 	}
 	else if (index + 1 == manager->utils_const[NB_CODERS])
@@ -114,49 +105,73 @@ void	loop_on_coder(t_manager *manager)
 	}
 }
 
-void init_dongle(t_manager *manager)
+void	init_dongle(t_manager *manager)
 {
-	int  i;
+	int	i;
 
 	i = 0;
 	while (i < manager->utils_const[NB_CODERS])
 	{
 		manager->dongles[i].id = i + 1;
 		pthread_mutex_init(&manager->dongles[i].dongle_mtx, NULL);
-		manager->dongles[i].last_time_used = 0; //to see if -1 is good value
+		manager->dongles[i].last_time_used = 0;
 		manager->dongles[i].available = TRUE;
 		manager->dongles[i].utils_const = manager->utils_const;
-		// testting this part
 		manager->dongles[i].queue_size = 2;
-		if (i == 0)
+		init_dongle_queue(manager, i);
+		i++;
+	}
+}
+
+// i = 0;
+// while (i < manager->utils_const[NB_CODERS])
+// {
+	// printf("Dongle %d ;[%d, %d]\n", manager->dongles[i].id, manager->dongles[i].queue[0], manager->dongles[i].queue[1]);
+	// i++;
+// }
+
+void	init_dongle_queue(t_manager *manager, int i)
+{
+	if (i == 0)
+	{
+		manager->dongles[i].queue[0] = 1;
+		manager->dongles[i].queue[1] = 2;
+	}
+	else if (i == manager->utils_const[NB_CODERS] - 1)
+	{
+		manager->dongles[i].queue[0] = 1;
+		manager->dongles[i].queue[1] = i + 1;
+	}
+	else
+	{
+		if (i % 2 == 1)
 		{
-			manager->dongles[i].queue[0] = 1;
-			manager->dongles[i].queue[1] = 2;
-		}
-		else if (i ==  manager->utils_const[NB_CODERS] - 1)
-		{
-			manager->dongles[i].queue[0] = 1;
 			manager->dongles[i].queue[1] = i + 1;
+			manager->dongles[i].queue[0] = i + 2;
 		}
 		else
 		{
-			if (i % 2 == 1)
-			{
-				manager->dongles[i].queue[1] = i + 1;
-				manager->dongles[i].queue[0] = i + 2;
-			}
-			else
-			{
-				manager->dongles[i].queue[0] = i + 1;
-				manager->dongles[i].queue[1] = i + 2;
-			}
+			manager->dongles[i].queue[0] = i + 1;
+			manager->dongles[i].queue[1] = i + 2;
 		}
-		i++;
 	}
-	// i = 0;
-	// while (i < manager->utils_const[NB_CODERS])
-	// {
-		// printf("Dongle %d ;[%d, %d]\n", manager->dongles[i].id, manager->dongles[i].queue[0], manager->dongles[i].queue[1]);
-		// i++;
-	// }
+}
+
+int init_manager(char **argv, t_manager *manager, t_coder **coders, t_dongle *dongles)
+{
+	coders = malloc(sizeof(t_coder *) * manager->utils_const[NB_CODERS]);
+	if (coders == NULL)
+	{
+		free(manager);
+		return (allocation_error());
+	}
+	dongles = malloc(sizeof(t_dongle) * manager->utils_const[NB_CODERS]);
+	if (dongles == NULL)
+		return (free_coder_and_manager(coders, manager));
+	manager->utils_const = manager->utils_const;
+	manager->coders = coders;
+	manager->dongles = dongles;
+	if (make_init(manager, argv) == -1)
+		return (free_coder_and_manager(coders, manager));
+	return (0);
 }

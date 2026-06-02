@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:17:16 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 19:04:03 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 21:49:03 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,24 +44,23 @@ void	ft_free_coders(t_coder **coders, int index_to_stop)
 	}
 }
 
-
-int free_coder_and_manager_with_error(t_coder **coders, t_manager *manager)
+int	free_coder_and_manager_with_error(t_coder **coders, t_manager *manager)
 {
 	free(coders);
 	free(manager);
 	return (allocation_error());
 }
 
-
-int free_coder_and_manager(t_coder **coders, t_manager *manager)
+int	free_coder_and_manager(t_coder **coders, t_manager *manager)
 {
 	free(coders);
 	free(manager);
 	return (-1);
 }
 
-void ft_big_free(t_manager *manager)
+void	ft_big_free(t_manager *manager)
 {
+	// to destroy mutex of all dongle at the end
 	pthread_mutex_destroy(&manager->protect_nb_ready); // to destroy at end
 	pthread_mutex_destroy(&manager->mutex_print); // to destroy at end
 	pthread_cond_destroy(&manager->cond_ready); // to destroy at end
