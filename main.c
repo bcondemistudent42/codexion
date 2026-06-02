@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 14:53:20 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 15:04:48 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int ac, char **argv)
 {
-	int		utils_const[7];
+	long long		utils_const[8];
 	t_coder	**coders;
 	t_dongle *dongles;
 	t_manager *manager;

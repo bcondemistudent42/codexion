@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 11:15:34 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 15:10:45 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef enum Const
 	TM_REFACTO,
 	COMPILE_REQUIRED,
 	DONGLE_COOLDOWN,
+	TM_START,
 	NB_CODERS
 }	t_const;
 
@@ -62,7 +63,7 @@ typedef struct s_dongle
 	int queue_size;
 	t_bool available;
 	pthread_mutex_t dongle_mtx;
-	int	*utils_const;
+	long long	*utils_const;
 }	t_dongle;
 
 
@@ -70,10 +71,9 @@ typedef struct s_Manager
 {
 	t_coder	**coders;
 	t_dongle	*dongles;
-	int	*utils_const;
+	long long	*utils_const;
 	int	nb_ready;
 	int check_ready;
-	long long time_start;
 	pthread_mutex_t protect_nb_ready;
 	pthread_mutex_t mutex_print;
 	pthread_cond_t cond_ready;
@@ -94,7 +94,7 @@ struct	s_coder
 {
 	int			id;
 	int			compile_cnt;
-	int			*utils_const;
+	long long			*utils_const;
 	long long	last_compile;
 	pthread_t	thread_id;
 	t_dongle	*left;
