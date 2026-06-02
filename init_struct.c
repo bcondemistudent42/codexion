@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/01 20:19:27 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 11:02:45 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,15 @@ void init_dongle(t_manager *manager);
 
 int	make_init(t_manager *manager, char **argv)
 {
+	pthread_mutex_init(&manager->protect_nb_ready, NULL); // to destroy at end
+	pthread_mutex_init(&manager->mutex_print, NULL); // to destroy at end
+	pthread_cond_init(&manager->cond_ready, NULL); // to destroy at end
+	pthread_cond_init(&manager->routine_wait_start, NULL); // to destroy at end
+	
 	manager->nb_ready = 0;
 	manager->coders = manager->coders;
 	manager->utils_const = manager->utils_const;
+	manager->check_ready = FALSE;
 	
 	assign_const(manager, argv);
 	init_dongle(manager);
@@ -32,13 +38,10 @@ int	make_init(t_manager *manager, char **argv)
 	// to handle if only 1 coder to find a solution to problem
 	// to ask he to make it burn out
 	// to see also if only two element left and right are the same to handle
-	pthread_cond_init(&manager->manager_sleep, NULL); // to destroy at end
-	pthread_cond_init(&manager->start_cond, NULL); // to destroy at end
-	pthread_mutex_init(&manager->mutex_manager, NULL); // to destroy at end
-	pthread_mutex_init(&manager->start_ready_mtx, NULL); // to destroy at end
-	pthread_mutex_init(&manager->var_mutex, NULL); // to destroy at end
-		pthread_mutex_init(&manager->dongle_mutex, NULL);
-	pthread_mutex_init(&manager->print_mutex, NULL);
+	// pthread_mutex_init(&manager->start_ready_mtx, NULL); // to destroy at end
+	// pthread_mutex_init(&manager->var_mutex, NULL); // to destroy at end
+		// pthread_mutex_init(&manager->dongle_mutex, NULL);
+	// pthread_mutex_init(&manager->print_mutex, NULL);
 	return (0);
 }
 
@@ -120,7 +123,7 @@ void init_dongle(t_manager *manager)
 	while (i < manager->utils_const[NB_CODERS])
 	{
 		manager->dongles[i].id = i + 1;
-		manager->dongles[i].last_used = 0; //to see if -1 is good value
+		manager->dongles[i].last_time_used = 0; //to see if -1 is good value
 		manager->dongles[i].available = TRUE;
 		manager->dongles[i].utils_const = manager->utils_const;
 		manager->dongles[i].queue_size = 0;

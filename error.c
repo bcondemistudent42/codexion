@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:17:16 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/01 11:20:45 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 11:02:52 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,9 @@ int free_coder_and_manager(t_coder **coders, t_manager *manager)
 
 void ft_big_free(t_manager *manager)
 {
-	pthread_cond_destroy(&manager->start_cond);
-	pthread_cond_destroy(&manager->manager_sleep);
-	pthread_mutex_destroy(&manager->var_mutex);
-	pthread_mutex_destroy(&manager->start_ready_mtx);
-	pthread_mutex_destroy(&manager->mutex_manager);
+	pthread_mutex_destroy(&manager->protect_nb_ready); // to destroy at end
+	pthread_cond_destroy(&manager->cond_ready); // to destroy at end
+	pthread_cond_destroy(&manager->routine_wait_start); // to destroy at end
 	free(manager->dongles);
 	ft_free_coders(manager->coders, manager->utils_const[NB_CODERS]);
 	free_coder_and_manager(manager->coders, manager);

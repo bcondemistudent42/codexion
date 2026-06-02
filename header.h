@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/01 20:19:04 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 11:02:37 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ typedef enum Bool
 typedef struct s_dongle
 {
 	int	id;
-	long long last_used;
+	long long last_time_used;
 	int queue[2];
 	int queue_size;
 	t_bool available;
@@ -71,14 +71,13 @@ typedef struct s_Manager
 	t_dongle	*dongles;
 	int	*utils_const;
 	int	nb_ready;
+	int check_ready;
 	long long time_start;
-	pthread_cond_t manager_sleep;
-	pthread_mutex_t mutex_manager;
-	pthread_cond_t start_cond;
-	pthread_mutex_t start_ready_mtx;
-	pthread_mutex_t dongle_mutex;
-	pthread_mutex_t print_mutex;
-	pthread_mutex_t var_mutex;
+	pthread_mutex_t protect_nb_ready;
+	pthread_mutex_t mutex_print;
+	pthread_cond_t cond_ready;
+	pthread_cond_t routine_wait_start;
+
 }	t_manager;
 
 

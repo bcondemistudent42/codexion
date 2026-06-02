@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 16:23:50 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/01 11:29:01 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/02 10:22:50 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@ long long get_time()
 }
 
 
-void ft_set_coders_time(t_manager *manager)
-{
-	int i;
+// void ft_set_coders_time(t_manager *manager)
+// {
+// 	int i;
 
-	i = 0;
-	pthread_mutex_lock(&manager->var_mutex);
-	while (i < manager->utils_const[NB_CODERS])
-	{
-		manager->coders[i]->last_compile = manager->time_start;
-		i++;
-	}
-	pthread_mutex_unlock(&manager->var_mutex);
-}
+// 	i = 0;
+// 	pthread_mutex_lock(&manager->var_mutex);
+// 	while (i < manager->utils_const[NB_CODERS])
+// 	{
+// 		manager->coders[i]->last_compile = manager->time_start;
+// 		i++;
+// 	}
+// 	pthread_mutex_unlock(&manager->var_mutex);
+// }
 
 // long long get_diff_time(long long actual_time, t_manager manager)
 // {
