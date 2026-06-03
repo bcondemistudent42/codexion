@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 17:15:09 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 17:19:39 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,9 @@ int	main(int ac, char **argv)
 	if (init_manager(argv, manager) == -1)
 		return (-1);
 	create_thread(manager);
+	final_clean(manager);
 	// to return -1 if error in create_thread
-	destroy_const_mutex(manager);
-	destroy_mutex_dongle(manager, manager->utils_const[NB_CODERS]);
-	free(manager->coders);
-	free(manager->dongles);
-	free(manager);
+
 	return (0);
 }
 

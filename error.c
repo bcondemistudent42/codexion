@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:17:16 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 15:23:40 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 17:19:20 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,13 @@ void destroy_const_mutex(t_manager *manager)
 	pthread_mutex_destroy(&manager->mutex_print);
 	pthread_cond_destroy(&manager->cond_ready);
 	pthread_cond_destroy(&manager->routine_wait_start);
+}
+
+void final_clean(t_manager *manager)
+{
+	destroy_const_mutex(manager);
+	destroy_mutex_dongle(manager, manager->utils_const[NB_CODERS]);
+	free(manager->coders);
+	free(manager->dongles);
+	free(manager);
 }

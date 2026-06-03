@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 17:15:30 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 17:19:29 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int		make_init(t_manager *manager, char **argv);
 int		init_manager(char **argv, t_manager *manager);
 
 // Clean
+void final_clean(t_manager *manager);
 void destroy_const_mutex(t_manager *manager);
 int		ft_error(void);
 int		allocation_error(void);
