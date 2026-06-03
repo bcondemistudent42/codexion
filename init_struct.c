@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 16:00:38 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 17:17:00 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,31 +157,31 @@ void	init_dongle_queue(t_manager *manager, int i)
 	}
 }
 
-int init_manager(char **argv, t_manager *manager, t_coder *coders, t_dongle *dongles)
+int init_manager(char **argv, t_manager *manager)
 {
 	int check_init;
 
-	coders = malloc(sizeof(t_coder) * manager->utils_const[NB_CODERS]);
-	if (coders == NULL)
+	manager->coders = malloc(sizeof(t_coder) * manager->utils_const[NB_CODERS]);
+	if (manager->coders == NULL)
 	{
 		free(manager);
 		return (allocation_error());
 	}
-	dongles = malloc(sizeof(t_dongle) * manager->utils_const[NB_CODERS]);
-	if (dongles == NULL)
+	manager->dongles = malloc(sizeof(t_dongle) * manager->utils_const[NB_CODERS]);
+	if (manager->dongles == NULL)
 	{
-		free(coders);
+		free(manager->dongles);
 		free(manager);
 		return (allocation_error());
 	}
 	manager->utils_const = manager->utils_const;
-	manager->coders = coders;
-	manager->dongles = dongles;
+	manager->coders = manager->coders;
+	manager->dongles = manager->dongles;
 	check_init = make_init(manager, argv);
 	if (check_init== -1)
 	{
-		free(dongles);
-		free(coders);
+		free(manager->dongles);
+		free(manager->coders);
 		free(manager);
 		return (-1);
 	}

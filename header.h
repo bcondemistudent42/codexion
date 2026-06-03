@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 15:29:57 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 17:15:30 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,7 @@ void	loop_on_coder(t_manager *manager);
 void	init_coder(int index, t_manager *manager);
 int		assignator_coders(t_manager *manager);
 int		make_init(t_manager *manager, char **argv);
-int		init_manager(char **argv,
-			t_manager *manager, t_coder *coders, t_dongle *dongles);
+int		init_manager(char **argv, t_manager *manager);
 
 // Clean
 void destroy_const_mutex(t_manager *manager);
