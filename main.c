@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 21:11:01 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 21:20:45 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ int	main(int ac, char **argv)
 	return (0);
 }
 
-
+// to add mutex init for all threads
+// to do function protect all mutex
+// to readapt free function and everything to clean dongle mutex
 
 
 // to implement edf

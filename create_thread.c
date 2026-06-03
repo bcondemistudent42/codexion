@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 21:03:15 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 22:24:41 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void compile(t_coder *coder);
 void debug(t_coder *coder);
 void refacto(t_coder *coder);
+int find_closest_burnout(t_dongle *dongle);
+int litlle_burnout(t_dongle *dongle);
 
 
 int	create_thread(t_manager *manager)
@@ -56,10 +58,11 @@ void	my_function(void *my_coder)
 	{
 		if (can_compile(coder) == TRUE)
 		{
-			take_both_dongle(coder);
 			compile(coder);
 			// to lock and unlock with the coder mutex
+			pthread_mutex_lock(&coder->coder_mutex);
 			coder->compile_cnt++;
+			pthread_mutex_unlock(&coder->coder_mutex);
 			// to lock and unlock with the coder mutex
 			debug(coder);
 			refacto(coder);
@@ -184,9 +187,10 @@ int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
 		return (FALSE);
 	if (free_at > request_time)
 		return (FALSE);
-	if (dongle->priority_type == EDF)
+	if (*dongle->priority_type == EDF)
 	{
-		// functions finds the min
+		if (find_closest_burnout(dongle) != coder_id)
+			return (FALSE);
 	}
 	else
 	{
@@ -196,9 +200,54 @@ int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
 	return (TRUE);
 }
 
+int find_closest_burnout(t_dongle *dongle)
+{
+	int output;
+
+	pthread_mutex_lock(&dongle->queue[0]->coder_mutex);
+	pthread_mutex_lock(&dongle->queue[1]->coder_mutex);
+	output = litlle_burnout(dongle);
+	if (output == EQUAL_BURNOUT)
+	{
+		if (dongle->queue[0]->compile_cnt < dongle->queue[1]->compile_cnt)
+			output = (dongle->queue[0]->id);
+		else if (dongle->queue[1]->compile_cnt < dongle->queue[0]->compile_cnt)
+			output = (dongle->queue[1]->id);
+		else
+		{
+			if (dongle->queue[0]->id < dongle->queue[1]->id)
+				output = (dongle->queue[0]->id);
+			else
+				output = (dongle->queue[1]->id);
+		}
+	}
+	pthread_mutex_unlock(&dongle->queue[0]->coder_mutex);
+	pthread_mutex_unlock(&dongle->queue[1]->coder_mutex);
+		return output;
+}
+
+int litlle_burnout(t_dongle *dongle)
+{
+	int output;
+	long long	first;
+	long long	second;
+
+	first = dongle->queue[0]->last_compile;
+	first += (dongle->utils_const[TM_BURNOUT]) * 1000;
+	second = dongle->queue[1]->last_compile;
+	second += (dongle->utils_const[TM_BURNOUT]) * 1000;
+	if (first < second)
+		output = (dongle->queue[0]->id);
+	else if (second < first)
+		output = (dongle->queue[1]->id);
+	else
+		output = (EQUAL_BURNOUT);
+	return (output);
+}
 
 void compile(t_coder *coder)
 {
+	take_both_dongle(coder);
 	pthread_mutex_lock(&coder->manager->mutex_print);
 	printf("%lld %d is compiling\n",get_time() - coder->utils_const[TM_START], coder->id);
 	pthread_mutex_unlock(&coder->manager->mutex_print);

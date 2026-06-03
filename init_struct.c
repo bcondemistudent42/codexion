@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 21:10:04 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 22:18:24 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	assign_const(t_manager *manager, char **argv)
 	manager->utils_const[DONGLE_COOLDOWN] = atoi(argv[7]);
 }
 
-
+// to change into int to return error if mutex init error
 void	init_coder(int index, t_manager *manager)
 {
 	t_dongle	*norm;
@@ -70,9 +70,12 @@ void	init_coder(int index, t_manager *manager)
 	norm = &manager->dongles[manager->utils_const[NB_CODERS] - 1];
 	manager->coders[index].manager = manager;
 	manager->coders[index].id = index + 1;
+	manager->coders[index].last_compile = 1;
+	if (manager->coders[index].id % 2 == 1)
+		manager->coders[index].last_compile = 0;
 	manager->coders[index].compile_cnt = 0;
 	manager->coders[index].utils_const = manager->utils_const;
-	manager->coders[index].last_compile = -1;
+	pthread_mutex_init(&manager->coders[index].coder_mutex, NULL);
 	if (index == 0)
 	{
 		manager->coders[index].left = norm;

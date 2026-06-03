@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 20:58:39 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 22:19:40 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ typedef struct s_dongle
 {
 	int				id;
 	int				*priority_type;
-	int				queue_size;
 	t_bool			available;
 	long long		last_time_used;
 	long long		*utils_const;
@@ -75,11 +74,16 @@ typedef struct s_Manager
 
 }	t_manager;
 
+typedef enum e_utils
+{
+	EQUAL_BURNOUT = -1
+}	t_utils;
+
 typedef enum e_scheduler
 {
 	SCHED_ERROR = -1,
 	SCHED_FIFOO = 1,
-	SCHED_EDF = 2
+	SCHED_EDF = 2,
 }	t_scheduler;
 
 struct	s_coder
@@ -93,6 +97,7 @@ struct	s_coder
 	// to create mutex for each
 	t_manager	*manager;
 	pthread_t	thread_id;
+	pthread_mutex_t coder_mutex;
 	long long	*utils_const;
 };
 
@@ -112,6 +117,7 @@ int		ft_error(void);
 int		allocation_error(void);
 int	thread_error(void);
 void destroy_mutex_dongle(t_manager *manager, int max);
+void destroy_mutex_coders(t_manager *manager, int max);
 
 // Thread Utils
 void	my_function(void *manager);
