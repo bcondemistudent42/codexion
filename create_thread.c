@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 20:49:03 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 21:03:15 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,10 +165,11 @@ void release_both_dongle(t_coder *coder)
 	coder->last_compile = time_released;
 }
 
-void	swap_priority(int queue[2])
+void	swap_priority(t_coder *queue[2])
 {
-	int	temp;
+	t_coder	*temp;
 
+	// problem here
 	temp = queue[0];
 	queue[0] = queue[1];
 	queue[1] = temp;
@@ -189,7 +190,7 @@ int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
 	}
 	else
 	{
-		if (dongle->queue[0] != coder_id)
+		if (dongle->queue[0]->id != coder_id)
 			return (FALSE);
 	}
 	return (TRUE);

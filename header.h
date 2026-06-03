@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 20:50:45 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 20:58:39 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ typedef enum Queu_Type
 typedef struct s_dongle
 {
 	int				id;
-	int				queue[2];
 	int				*priority_type;
 	int				queue_size;
 	t_bool			available;
 	long long		last_time_used;
 	long long		*utils_const;
+	t_coder				*queue[2];
 	pthread_mutex_t	dongle_mtx;
 }	t_dongle;
 
@@ -90,6 +90,7 @@ struct	s_coder
 	t_dongle	*left;
 	t_dongle	*right;
 	// t_state		state;
+	// to create mutex for each
 	t_manager	*manager;
 	pthread_t	thread_id;
 	long long	*utils_const;
@@ -114,7 +115,7 @@ void destroy_mutex_dongle(t_manager *manager, int max);
 
 // Thread Utils
 void	my_function(void *manager);
-void	swap_priority(int queue[2]);
+void	swap_priority(t_coder *queue[2]);
 void	release_both_dongle(t_coder *coder);
 void	launch_thread(t_manager *manager);
 void	wait_for_start(t_coder *coder);

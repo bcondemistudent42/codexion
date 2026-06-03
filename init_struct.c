@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 20:50:02 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 21:10:04 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,25 +137,25 @@ void	init_dongle_queue(t_manager *manager, int i)
 {
 	if (i == 0)
 	{
-		manager->dongles[i].queue[0] = 1;
-		manager->dongles[i].queue[1] = 2;
+		manager->dongles[i].queue[0] = &manager->coders[0];
+		manager->dongles[i].queue[1] = &manager->coders[1];
 	}
 	else if (i == manager->utils_const[NB_CODERS] - 1)
 	{
-		manager->dongles[i].queue[0] = 1;
-		manager->dongles[i].queue[1] = i + 1;
+		manager->dongles[i].queue[0] = &manager->coders[0];
+		manager->dongles[i].queue[1] = &manager->coders[i];
 	}
 	else
 	{
 		if (i % 2 == 1)
 		{
-			manager->dongles[i].queue[1] = i + 1;
-			manager->dongles[i].queue[0] = i + 2;
+			manager->dongles[i].queue[1] = &manager->coders[i];
+			manager->dongles[i].queue[0] = &manager->coders[i + 1];
 		}
 		else
 		{
-			manager->dongles[i].queue[0] = i + 1;
-			manager->dongles[i].queue[1] = i + 2;
+			manager->dongles[i].queue[0] = &manager->coders[i];
+			manager->dongles[i].queue[1] = &manager->coders[i + 1];
 		}
 	}
 }
