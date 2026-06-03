@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 22:18:24 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 22:36:02 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	init_coder(int index, t_manager *manager)
 		manager->coders[index].last_compile = 0;
 	manager->coders[index].compile_cnt = 0;
 	manager->coders[index].utils_const = manager->utils_const;
+	// to protect mutex correctly already have done function free coder mutex
 	pthread_mutex_init(&manager->coders[index].coder_mutex, NULL);
 	if (index == 0)
 	{

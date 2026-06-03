@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 22:24:41 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 22:32:18 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,7 @@ void	take_both_dongle(t_coder *coder)
 void release_dongle(t_dongle *dongle, long long time_release)
 {
 	pthread_mutex_lock(&dongle->dongle_mtx);
-	(void)(time_release);
-	dongle->last_time_used = time_release; // to see if do now or when release
+	dongle->last_time_used = time_release;
 	dongle->available = TRUE;
 	swap_priority(dongle->queue);
 	pthread_mutex_unlock(&dongle->dongle_mtx);
@@ -165,14 +164,15 @@ void release_both_dongle(t_coder *coder)
 	time_released = get_time();
 	release_dongle(coder->left, time_released);
 	release_dongle(coder->right, time_released);
+	pthread_mutex_lock(&coder->coder_mutex);
 	coder->last_compile = time_released;
+	pthread_mutex_unlock(&coder->coder_mutex);
 }
 
 void	swap_priority(t_coder *queue[2])
 {
 	t_coder	*temp;
 
-	// problem here
 	temp = queue[0];
 	queue[0] = queue[1];
 	queue[1] = temp;
@@ -223,7 +223,7 @@ int find_closest_burnout(t_dongle *dongle)
 	}
 	pthread_mutex_unlock(&dongle->queue[0]->coder_mutex);
 	pthread_mutex_unlock(&dongle->queue[1]->coder_mutex);
-		return output;
+	return output;
 }
 
 int litlle_burnout(t_dongle *dongle)
