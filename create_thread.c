@@ -6,11 +6,16 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 15:49:12 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 18:53:32 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
+
+void compile(t_coder *coder);
+void debug(t_coder *coder);
+void refacto(t_coder *coder);
+
 
 int	create_thread(t_manager *manager)
 {
@@ -47,45 +52,15 @@ void	my_function(void *my_coder)
 		if (can_compile(coder) == TRUE)
 		{
 			take_both_dongle(coder);
-			pthread_mutex_lock(&coder->manager->mutex_print);
-			printf("%lld %d is compiling\n",
-				get_time() - coder->utils_const[TM_START], coder->id);
-			pthread_mutex_unlock(&coder->manager->mutex_print);
-
-			usleep(coder->utils_const[TM_COMPILE] * 1000);
-			release_both_dongle(coder);
-
-			pthread_mutex_lock(&coder->manager->mutex_print);
-			printf("%lld %d is debugging\n",
-					get_time() - coder->utils_const[TM_START], coder->id);
-			pthread_mutex_unlock(&coder->manager->mutex_print);
-
-			usleep(coder->utils_const[TM_DEBUG] * 1000);
-
-			// to check for all steps if burnout
-			pthread_mutex_lock(&coder->manager->mutex_print);
-			printf("%lld %d is refactoring\n",
-				get_time() - coder->utils_const[TM_START], coder->id);
-			pthread_mutex_unlock(&coder->manager->mutex_print);
-
-			usleep(coder->utils_const[TM_REFACTO]* 1000);
-
+			compile(coder);
+			// to lock and unlock with the coder mutex
 			coder->compile_cnt++;
+			// to lock and unlock with the coder mutex
+			debug(coder);
+			refacto(coder);
 		}
 		else
-		{
-			if (get_time() - coder->last_compile < coder->utils_const[TM_BURNOUT] * 1000)
-				usleep(10);
-			else if (coder->last_compile == -1)
-				usleep(10);
-			else
-			{
-				pthread_mutex_lock(&coder->manager->mutex_print);
-				printf("%lld %d has burnout\n", get_time() - coder->utils_const[TM_START], coder->id);
-				pthread_mutex_unlock(&coder->manager->mutex_print);
-				return ;
-			}
-		}
+			usleep(10);
 	}
 }
 
@@ -206,4 +181,32 @@ int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
 	if (dongle->queue[0] != coder_id)
 		return (FALSE);
 	return (TRUE);
+}
+
+
+void compile(t_coder *coder)
+{
+	pthread_mutex_lock(&coder->manager->mutex_print);
+	printf("%lld %d is compiling\n",get_time() - coder->utils_const[TM_START], coder->id);
+	pthread_mutex_unlock(&coder->manager->mutex_print);
+	usleep(coder->utils_const[TM_COMPILE] * 1000);
+	release_both_dongle(coder);
+}
+
+void debug(t_coder *coder)
+{
+	pthread_mutex_lock(&coder->manager->mutex_print);
+	printf("%lld %d is debugging\n",
+	get_time() - coder->utils_const[TM_START], coder->id);
+	pthread_mutex_unlock(&coder->manager->mutex_print);
+	usleep(coder->utils_const[TM_DEBUG] * 1000);
+}
+
+void refacto(t_coder *coder)
+{
+	pthread_mutex_lock(&coder->manager->mutex_print);
+	printf("%lld %d is refactoring\n",
+	get_time() - coder->utils_const[TM_START], coder->id);
+	pthread_mutex_unlock(&coder->manager->mutex_print);
+	usleep(coder->utils_const[TM_REFACTO]* 1000);
 }
