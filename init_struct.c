@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 14:01:11 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 14:11:38 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	make_init(t_manager *manager, char **argv)
 	assign_const(manager, argv);
 	init_dongle(manager);
 	if (assignator_coders(manager) == -1)
-		return (-1);
+		return (ft_big_free_error(manager));
 	loop_on_coder(manager);
 	// to handle if only 1 coder to find a solution to problem
 	// to ask he to make it burn out
@@ -71,7 +71,6 @@ int	assignator_coders(t_manager *manager)
 		my_coder = malloc(sizeof(t_coder));
 		if (my_coder == NULL)
 		{
-			free(manager->dongles);
 			ft_free_coders(manager->coders, i);
 			return (-1);
 		}
@@ -188,7 +187,10 @@ int init_manager(char **argv, t_manager *manager, t_coder **coders, t_dongle *do
 	manager->coders = coders;
 	manager->dongles = dongles;
 	if (make_init(manager, argv) == -1)
+	{
+		// free(coders);
+		// free(dongles);
 		return (-1);
-	// return (free_coder_and_manager(coders, manager));
+	}
 	return (0);
 }
