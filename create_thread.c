@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 22:32:18 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 22:59:15 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,12 +200,25 @@ int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
 	return (TRUE);
 }
 
+// to refacto
 int find_closest_burnout(t_dongle *dongle)
 {
 	int output;
+	t_coder *first_to_lock;
+	t_coder *second_to_lock;
 
-	pthread_mutex_lock(&dongle->queue[0]->coder_mutex);
-	pthread_mutex_lock(&dongle->queue[1]->coder_mutex);
+	if (dongle->queue[0]->id < dongle->queue[1]->id)
+	{
+		first_to_lock = dongle->queue[0];
+		second_to_lock = dongle->queue[1];
+	}
+	else
+	{
+		first_to_lock = dongle->queue[1];
+		second_to_lock = dongle->queue[0];
+	}
+	pthread_mutex_lock(&first_to_lock->coder_mutex);
+	pthread_mutex_lock(&second_to_lock->coder_mutex);
 	output = litlle_burnout(dongle);
 	if (output == EQUAL_BURNOUT)
 	{
@@ -221,9 +234,9 @@ int find_closest_burnout(t_dongle *dongle)
 				output = (dongle->queue[1]->id);
 		}
 	}
-	pthread_mutex_unlock(&dongle->queue[0]->coder_mutex);
-	pthread_mutex_unlock(&dongle->queue[1]->coder_mutex);
-	return output;
+	pthread_mutex_unlock(&second_to_lock->coder_mutex);
+	pthread_mutex_unlock(&first_to_lock->coder_mutex);
+	return (output);
 }
 
 int litlle_burnout(t_dongle *dongle)
