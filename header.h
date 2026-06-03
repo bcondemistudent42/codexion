@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 17:19:29 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 18:59:21 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_dongle
 typedef struct s_Manager
 {
 	int				nb_ready;
+	int				thread_error;
 	int				check_ready;
 	t_coder			*coders;
 	t_dongle		*dongles;

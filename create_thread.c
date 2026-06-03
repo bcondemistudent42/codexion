@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 18:53:32 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 19:04:26 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,13 @@ int	create_thread(t_manager *manager)
 		if (pthread_create(&manager->coders[i].thread_id, NULL,
 				(void *) my_function, (void *)(&manager->coders[i])) != 0)
 		{
-			printf("ERROR CREATING THREAD");
-			// to handle bettter
-			make_thread_join(manager, i);
-			// ft_big_free(manager);
+			printf("ERROR CREATING THREAD\n");
+			pthread_mutex_lock(&manager->protect_nb_ready);
+			manager->check_ready = TRUE;
+			manager->thread_error = TRUE;
+			pthread_cond_broadcast(&manager->routine_wait_start);
+			pthread_mutex_unlock(&manager->protect_nb_ready);
+			make_thread_join(manager, i + 1);
 			return (-1);
 		}
 	}
@@ -45,6 +48,8 @@ void	my_function(void *my_coder)
 
 	coder = (t_coder *)(my_coder);
 	wait_for_start(coder);
+	if (coder->manager->thread_error == TRUE)
+		return ;
 	if (coder->id % 2 == 0)
 		usleep(1000);
 	while (coder->compile_cnt < coder->utils_const[COMPILE_REQUIRED])

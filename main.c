@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 17:21:22 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 19:03:02 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,12 @@ int	main(int ac, char **argv)
 	manager->utils_const[NB_CODERS] = atoi(argv[1]);
 	if (init_manager(argv, manager) == -1)
 		return (-1);
-	create_thread(manager);
+	if (create_thread(manager) == -1)
+	{
+		final_clean(manager);
+		return (-1);
+	}
 	final_clean(manager);
-	// to return -1 if error in create_thread
-
 	return (0);
 }
 

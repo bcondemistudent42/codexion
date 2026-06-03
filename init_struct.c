@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 17:17:00 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 18:59:49 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	make_init(t_manager *manager, char **argv)
 		return (thread_error());
 	}
 	manager->nb_ready = 0;
+	manager->thread_error = FALSE;
 	manager->coders = manager->coders;
 	manager->utils_const = manager->utils_const;
 	manager->check_ready = FALSE;
