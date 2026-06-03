@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 18:59:21 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 19:44:01 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ void	init_dongle_queue(t_manager *manager, int i);
 int	init_dongle(t_manager *manager);
 void	loop_on_coder(t_manager *manager);
 void	init_coder(int index, t_manager *manager);
-int		assignator_coders(t_manager *manager);
 int		make_init(t_manager *manager, char **argv);
 int		init_manager(char **argv, t_manager *manager);
 
@@ -121,7 +120,6 @@ void	wait_for_start(t_coder *coder);
 void	take_both_dongle(t_coder *coder);
 void	take_dongle(t_dongle *dongle, t_coder *coder);
 void	release_dongle(t_dongle *dongle, long long time_release);
-int		can_compile(t_coder *coder);
 int		can_compile(t_coder *coder);
 int		create_thread(t_manager *manager);
 int		make_thread_join(t_manager *manager, int index);

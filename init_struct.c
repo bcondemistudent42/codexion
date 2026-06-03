@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 19:42:20 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 19:45:54 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ int	make_init(t_manager *manager, char **argv)
 	}
 	manager->nb_ready = 0;
 	manager->thread_error = FALSE;
-	manager->coders = manager->coders;
-	manager->utils_const = manager->utils_const;
 	manager->check_ready = FALSE;
 	assign_const(manager, argv);
 	loop_on_coder(manager);
@@ -175,9 +173,6 @@ int init_manager(char **argv, t_manager *manager)
 		free(manager);
 		return (allocation_error());
 	}
-	manager->utils_const = manager->utils_const;
-	manager->coders = manager->coders;
-	manager->dongles = manager->dongles;
 	check_init = make_init(manager, argv);
 	if (check_init== -1)
 	{
