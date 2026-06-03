@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 21:52:19 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 12:04:50 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	init_coder(int index, t_manager *manager)
 	manager->coders[index]->id = index + 1;
 	manager->coders[index]->compile_cnt = 0;
 	manager->coders[index]->utils_const = manager->utils_const;
-	manager->coders[index]->last_compile = 0;
+	manager->coders[index]->last_compile = -1;
 	if (index == 0)
 	{
 		manager->coders[index]->left = norm;

@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 21:48:21 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 12:05:18 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	create_thread(t_manager *manager)
 			return (-1);
 		}
 	}
+	// to make all coders last debug to tm_start for the first time
 	launch_thread(manager);
 	make_thread_join(manager, manager->utils_const[NB_CODERS]);
 	return (0);
@@ -54,6 +55,7 @@ void	my_function(void *my_coder)
 
 			usleep(coder->utils_const[TM_COMPILE] * 1000);
 			release_both_dongle(coder);
+			coder->last_compile = get_time();
 
 			pthread_mutex_lock(&coder->manager->mutex_print);
 			printf("%lld %d is debugging\n",
@@ -72,7 +74,19 @@ void	my_function(void *my_coder)
 			coder->compile_cnt++;
 		}
 		else
-			usleep(100); // to see if good solution
+		{
+			if (get_time() - coder->last_compile < coder->utils_const[TM_BURNOUT] * 1000)
+				usleep(10);
+			else if (coder->last_compile == -1)
+				usleep(10);
+			else
+			{
+				pthread_mutex_lock(&coder->manager->mutex_print);
+				printf("%lld %d has burnout\n", get_time() - coder->utils_const[TM_START], coder->id);
+				pthread_mutex_unlock(&coder->manager->mutex_print);
+				return ;
+			}
+		}
 	}
 }
 
@@ -101,6 +115,7 @@ void	wait_for_start(t_coder *coder)
 			&coder->manager->protect_nb_ready);
 	pthread_mutex_unlock(&coder->manager->protect_nb_ready);
 }
+
 
 void	launch_thread(t_manager *manager)
 {
@@ -181,7 +196,7 @@ void	swap_priority(int queue[2])
 
 int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
 {
-	int	free_at;
+	long long	free_at;
 
 	free_at = dongle->last_time_used + dongle->utils_const[DONGLE_COOLDOWN];
 	if (dongle->available == FALSE)
