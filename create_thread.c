@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 19:04:26 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 19:40:06 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	create_thread(t_manager *manager)
 			manager->thread_error = TRUE;
 			pthread_cond_broadcast(&manager->routine_wait_start);
 			pthread_mutex_unlock(&manager->protect_nb_ready);
-			make_thread_join(manager, i + 1);
+			make_thread_join(manager, i);
 			return (-1);
 		}
 	}
