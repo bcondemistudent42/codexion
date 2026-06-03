@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:17:16 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 10:35:29 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 14:04:36 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int	free_coder_and_manager(t_coder **coders, t_manager *manager)
 void	ft_big_free(t_manager *manager)
 {
 	// to destroy mutex of all dongle at the end
+	destroy_mutex_dongle(manager);
 	pthread_mutex_destroy(&manager->protect_nb_ready); // to destroy at end
 	pthread_mutex_destroy(&manager->mutex_print); // to destroy at end
 	pthread_cond_destroy(&manager->cond_ready); // to destroy at end
@@ -68,4 +69,24 @@ void	ft_big_free(t_manager *manager)
 	free(manager->dongles);
 	ft_free_coders(manager->coders, manager->utils_const[NB_CODERS]);
 	free_coder_and_manager(manager->coders, manager);
+}
+
+int	ft_big_free_error(t_manager *manager)
+{
+	free(manager->dongles);
+	free_coder_and_manager(manager->coders, manager);
+	return (-1);
+}
+
+
+void destroy_mutex_dongle(t_manager *manager)
+{
+	int i;
+
+	i = 0;
+	while (i < manager->utils_const[NB_CODERS])
+	{
+		pthread_mutex_destroy(&manager->dongles[i].dongle_mtx);
+		i++;
+	}
 }

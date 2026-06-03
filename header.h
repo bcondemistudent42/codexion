@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 22:04:40 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 14:03:59 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ int		ft_error(void);
 int		allocation_error(void);
 int		free_coder_and_manager(t_coder **coders, t_manager *manager);
 int		free_coder_and_manager_with_error(t_coder **coders, t_manager *manager);
+int	ft_big_free_error(t_manager *manager);
+void destroy_mutex_dongle(t_manager *manager);
 
 // Thread Utils
 void	my_function(void *manager);

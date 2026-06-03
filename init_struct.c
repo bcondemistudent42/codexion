@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 12:09:04 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 14:01:11 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,26 @@
 
 int	make_init(t_manager *manager, char **argv)
 {
-	// to protect all mutex creation
-	pthread_mutex_init(&manager->protect_nb_ready, NULL); // to destroy at end
-	pthread_mutex_init(&manager->mutex_print, NULL); // to destroy at end
-	pthread_cond_init(&manager->cond_ready, NULL); // to destroy at end
-	pthread_cond_init(&manager->routine_wait_start, NULL); // to destroy at end
+	if (pthread_mutex_init(&manager->protect_nb_ready, NULL) != 0)
+		return (ft_big_free_error(manager));
+	if (pthread_mutex_init(&manager->mutex_print, NULL) != 0)
+	{
+		pthread_mutex_destroy(&manager->protect_nb_ready);
+		return (ft_big_free_error(manager));
+	}
+	if (pthread_cond_init(&manager->cond_ready, NULL) != 0)
+	{
+		pthread_mutex_destroy(&manager->protect_nb_ready);
+		pthread_mutex_destroy(&manager->mutex_print);
+		return (ft_big_free_error(manager));
+	}
+	if (pthread_cond_init(&manager->routine_wait_start, NULL))
+	{
+		pthread_cond_destroy(&manager->cond_ready);
+		pthread_mutex_destroy(&manager->protect_nb_ready);
+		pthread_mutex_destroy(&manager->mutex_print);
+		return (ft_big_free_error(manager));
+	}
 	manager->nb_ready = 0;
 	manager->coders = manager->coders;
 	manager->utils_const = manager->utils_const;
@@ -173,6 +188,7 @@ int init_manager(char **argv, t_manager *manager, t_coder **coders, t_dongle *do
 	manager->coders = coders;
 	manager->dongles = dongles;
 	if (make_init(manager, argv) == -1)
-		return (free_coder_and_manager(coders, manager));
+		return (-1);
+	// return (free_coder_and_manager(coders, manager));
 	return (0);
 }

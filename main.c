@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/02 21:42:37 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 14:00:49 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int	main(int ac, char **argv)
 	create_thread(manager);
 	ft_big_free(manager);
 }
+
+// must destroy mutex of all dongles
 
 
 	// to do the monitor stuff to handle each coder and time correctly

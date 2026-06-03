@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 12:10:42 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 14:01:34 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,12 @@ int	create_thread(t_manager *manager)
 		if (pthread_create(&manager->coders[i]->thread_id, NULL,
 				(void *) my_function, manager->coders[i]) != 0)
 		{
-			// to handle this error case later, delete mutex and everything
-			// to see with Adrien on monday
 			printf("ERROR CREATING THREAD");
 			make_thread_join(manager, i);
+			ft_big_free(manager);
 			return (-1);
 		}
 	}
-	// to make all coders last debug to tm_start for the first time
 	launch_thread(manager);
 	make_thread_join(manager, manager->utils_const[NB_CODERS]);
 	return (0);
@@ -208,14 +206,3 @@ int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
 		return (FALSE);
 	return (TRUE);
 }
-
-// DONGLE_COOLDOWN = 1
-// 1-2-3-4-5-6-7-8-9-10-11-12-13-14-15
-	// l o   r
-	// a o   e
-	// s o   q
-	// t o   u
-	// u o   e
-	// s o   s
-	// e o   t
-	// d   
