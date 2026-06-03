@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 18:59:49 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 19:42:20 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ int init_manager(char **argv, t_manager *manager)
 	manager->dongles = malloc(sizeof(t_dongle) * manager->utils_const[NB_CODERS]);
 	if (manager->dongles == NULL)
 	{
-		free(manager->dongles);
+		free(manager->coders);
 		free(manager);
 		return (allocation_error());
 	}
