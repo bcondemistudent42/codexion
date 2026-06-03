@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 12:05:18 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 12:10:42 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	my_function(void *my_coder)
 
 			usleep(coder->utils_const[TM_COMPILE] * 1000);
 			release_both_dongle(coder);
-			coder->last_compile = get_time();
 
 			pthread_mutex_lock(&coder->manager->mutex_print);
 			printf("%lld %d is debugging\n",
@@ -64,6 +63,7 @@ void	my_function(void *my_coder)
 
 			usleep(coder->utils_const[TM_DEBUG] * 1000);
 
+			// to check for all steps if burnout
 			pthread_mutex_lock(&coder->manager->mutex_print);
 			printf("%lld %d is refactoring\n",
 				get_time() - coder->utils_const[TM_START], coder->id);
@@ -183,6 +183,7 @@ void release_both_dongle(t_coder *coder)
 	time_released = get_time();
 	release_dongle(coder->left, time_released);
 	release_dongle(coder->right, time_released);
+	coder->last_compile = time_released;
 }
 
 void	swap_priority(int queue[2])
