@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 14:00:49 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 16:02:43 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	main(int ac, char **argv)
 {
 	long long		utils_const[8];
-	t_coder			**coders;
+	t_coder			*coders;
 	t_dongle		*dongles;
 	t_manager		*manager;
 
@@ -23,18 +23,22 @@ int	main(int ac, char **argv)
 		return (ft_error());
 	manager = malloc(sizeof(t_manager));
 	if (manager == NULL)
-		return (-1);
-	dongles = NULL;
-	coders = NULL;
+		return (allocation_error());
 	manager->utils_const = utils_const;
 	manager->utils_const[NB_CODERS] = atoi(argv[1]);
+	coders = NULL;
+	dongles = NULL;
 	if (init_manager(argv, manager, coders, dongles) == -1)
 		return (-1);
-	create_thread(manager);
-	ft_big_free(manager);
+	if (create_thread(manager) == -1)
+		return (-1);
+	destroy_const_mutex(manager);
+	destroy_mutex_dongle(manager, manager->utils_const[NB_CODERS]);
+	free(manager->coders);
+	free(manager->dongles);
+	free(manager);
+	return (0);
 }
-
-// must destroy mutex of all dongles
 
 
 	// to do the monitor stuff to handle each coder and time correctly

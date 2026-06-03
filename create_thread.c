@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 14:01:34 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 15:49:12 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@ int	create_thread(t_manager *manager)
 	i = -1;
 	while (++i < manager->utils_const[NB_CODERS])
 	{
-		if (pthread_create(&manager->coders[i]->thread_id, NULL,
-				(void *) my_function, manager->coders[i]) != 0)
+		if (pthread_create(&manager->coders[i].thread_id, NULL,
+				(void *) my_function, (void *)(&manager->coders[i])) != 0)
 		{
 			printf("ERROR CREATING THREAD");
+			// to handle bettter
 			make_thread_join(manager, i);
-			ft_big_free(manager);
+			// ft_big_free(manager);
 			return (-1);
 		}
 	}
@@ -96,7 +97,7 @@ int	make_thread_join(t_manager *manager, int index)
 	while (i < index)
 	{
 		// check succeded to join thread
-		pthread_join(manager->coders[i]->thread_id, NULL);
+		pthread_join(manager->coders[i].thread_id, NULL);
 		i++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:17:16 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 14:04:36 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 15:23:40 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,61 +32,28 @@ int	allocation_error(void)
 	return (-1);
 }
 
-void	ft_free_coders(t_coder **coders, int index_to_stop)
+int	thread_error(void)
 {
-	int	i;
-
-	i = 0;
-	while (i < index_to_stop)
-	{
-		free(coders[i]);
-		i++;
-	}
-}
-
-int	free_coder_and_manager_with_error(t_coder **coders, t_manager *manager)
-{
-	free(coders);
-	free(manager);
-	return (allocation_error());
-}
-
-int	free_coder_and_manager(t_coder **coders, t_manager *manager)
-{
-	free(coders);
-	free(manager);
+	printf("A mutex init faile\n");
 	return (-1);
 }
 
-void	ft_big_free(t_manager *manager)
-{
-	// to destroy mutex of all dongle at the end
-	destroy_mutex_dongle(manager);
-	pthread_mutex_destroy(&manager->protect_nb_ready); // to destroy at end
-	pthread_mutex_destroy(&manager->mutex_print); // to destroy at end
-	pthread_cond_destroy(&manager->cond_ready); // to destroy at end
-	pthread_cond_destroy(&manager->routine_wait_start); // to destroy at end
-	free(manager->dongles);
-	ft_free_coders(manager->coders, manager->utils_const[NB_CODERS]);
-	free_coder_and_manager(manager->coders, manager);
-}
-
-int	ft_big_free_error(t_manager *manager)
-{
-	free(manager->dongles);
-	free_coder_and_manager(manager->coders, manager);
-	return (-1);
-}
-
-
-void destroy_mutex_dongle(t_manager *manager)
+void destroy_mutex_dongle(t_manager *manager, int max)
 {
 	int i;
 
 	i = 0;
-	while (i < manager->utils_const[NB_CODERS])
+	while (i < max)
 	{
 		pthread_mutex_destroy(&manager->dongles[i].dongle_mtx);
 		i++;
 	}
+}
+
+void destroy_const_mutex(t_manager *manager)
+{
+	pthread_mutex_destroy(&manager->protect_nb_ready);
+	pthread_mutex_destroy(&manager->mutex_print);
+	pthread_cond_destroy(&manager->cond_ready);
+	pthread_cond_destroy(&manager->routine_wait_start);
 }

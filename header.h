@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 14:03:59 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 15:29:57 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_Manager
 {
 	int				nb_ready;
 	int				check_ready;
-	t_coder			**coders;
+	t_coder			*coders;
 	t_dongle		*dongles;
 	long long		*utils_const;
 	pthread_mutex_t	protect_nb_ready;
@@ -87,7 +87,7 @@ struct	s_coder
 	long long	last_compile;
 	t_dongle	*left;
 	t_dongle	*right;
-	t_state		state;
+	// t_state		state;
 	t_manager	*manager;
 	pthread_t	thread_id;
 	long long	*utils_const;
@@ -95,24 +95,21 @@ struct	s_coder
 
 // Init Struct
 void	assign_const(t_manager *manager, char **argv);
-void	init_dongle(t_manager *manager);
 void	init_dongle_queue(t_manager *manager, int i);
+int	init_dongle(t_manager *manager);
 void	loop_on_coder(t_manager *manager);
 void	init_coder(int index, t_manager *manager);
 int		assignator_coders(t_manager *manager);
 int		make_init(t_manager *manager, char **argv);
 int		init_manager(char **argv,
-			t_manager *manager, t_coder **coders, t_dongle *dongles);
+			t_manager *manager, t_coder *coders, t_dongle *dongles);
 
 // Clean
-void	ft_big_free(t_manager *manager);
-void	ft_free_coders(t_coder **coders, int index_to_stop);
+void destroy_const_mutex(t_manager *manager);
 int		ft_error(void);
 int		allocation_error(void);
-int		free_coder_and_manager(t_coder **coders, t_manager *manager);
-int		free_coder_and_manager_with_error(t_coder **coders, t_manager *manager);
-int	ft_big_free_error(t_manager *manager);
-void destroy_mutex_dongle(t_manager *manager);
+int	thread_error(void);
+void destroy_mutex_dongle(t_manager *manager, int max);
 
 // Thread Utils
 void	my_function(void *manager);
