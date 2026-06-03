@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 21:20:45 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 23:02:00 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ int	main(int ac, char **argv)
 	return (0);
 }
 
-// to add mutex init for all threads
 // to do function protect all mutex
+// to protect all mutex of all coders
 // to readapt free function and everything to clean dongle mutex
 
 
-// to implement edf
-// to do hte makefiel without wildcard
+// to do the makefiel without wildcard at the end
 // to do the monitor stuff to handle each coder and time correctly
+
 // 	}
 // int j = 0;
 // while (j < utils_const[NB_CODERS])
