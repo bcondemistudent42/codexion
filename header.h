@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 19:44:01 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 20:50:45 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,6 @@
 # include <pthread.h>
 
 typedef struct s_coder	t_coder;
-
-typedef enum State
-{
-	COMPILING,
-	DEBUG,
-	REFACTO,
-	INACTIVE
-}	t_state;
 
 typedef enum Const
 {
@@ -48,10 +40,18 @@ typedef enum Bool
 	TRUE
 }	t_bool;
 
+
+typedef enum Queu_Type
+{
+	EDF,
+	FIFO
+}	t_queu_type;
+
 typedef struct s_dongle
 {
 	int				id;
 	int				queue[2];
+	int				*priority_type;
 	int				queue_size;
 	t_bool			available;
 	long long		last_time_used;
@@ -63,6 +63,7 @@ typedef struct s_Manager
 {
 	int				nb_ready;
 	int				thread_error;
+	int				priority_type;
 	int				check_ready;
 	t_coder			*coders;
 	t_dongle		*dongles;

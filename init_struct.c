@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 19:45:54 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 20:50:02 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,6 @@ int	make_init(t_manager *manager, char **argv)
 		pthread_mutex_destroy(&manager->mutex_print);
 		return (thread_error());
 	}
-	manager->nb_ready = 0;
-	manager->thread_error = FALSE;
-	manager->check_ready = FALSE;
 	assign_const(manager, argv);
 	loop_on_coder(manager);
 	if (init_dongle(manager) == -1)
@@ -49,6 +46,13 @@ int	make_init(t_manager *manager, char **argv)
 
 void	assign_const(t_manager *manager, char **argv)
 {
+	manager->nb_ready = 0;
+	manager->thread_error = FALSE;
+	manager->check_ready = FALSE;
+	if (strcmp(argv[8], "fifo") == 0)
+		manager->priority_type = FIFO;
+	else
+		manager->priority_type = EDF;
 	manager->utils_const[NB_CODERS] = atoi(argv[1]);
 	manager->utils_const[TM_BURNOUT] = atoi(argv[2]);
 	manager->utils_const[TM_COMPILE] = atoi(argv[3]);
@@ -112,10 +116,10 @@ int	init_dongle(t_manager *manager)
 			destroy_mutex_dongle(manager, i);
 			return (thread_error());
 		}
-		manager->dongles[i].last_time_used = 0;
 		manager->dongles[i].available = TRUE;
+		manager->dongles[i].last_time_used = 0;
+		manager->dongles[i].priority_type = &manager->priority_type;
 		manager->dongles[i].utils_const = manager->utils_const;
-		manager->dongles[i].queue_size = 2;
 		init_dongle_queue(manager, i);
 		i++;
 	}

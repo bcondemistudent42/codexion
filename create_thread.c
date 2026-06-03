@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 19:40:06 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/03 20:49:03 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,8 +183,15 @@ int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
 		return (FALSE);
 	if (free_at > request_time)
 		return (FALSE);
-	if (dongle->queue[0] != coder_id)
-		return (FALSE);
+	if (dongle->priority_type == EDF)
+	{
+		// functions finds the min
+	}
+	else
+	{
+		if (dongle->queue[0] != coder_id)
+			return (FALSE);
+	}
 	return (TRUE);
 }
 
