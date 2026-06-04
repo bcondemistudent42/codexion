@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 00:33:37 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 00:38:18 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,32 +48,36 @@ void	my_function(void *my_coder)
 	if (coder->id % 2 == 0)
 		usleep(1000);
 	while (coder->compile_cnt < coder->utils_const[COMPILE_REQUIRED])
-	{
-		pthread_mutex_lock(&coder->manager->mutex_manager);
-		if (coder->manager->end_type != RUNNING)
-		{
-			pthread_mutex_unlock(&coder->manager->mutex_manager);
+		if (coders_actions(coder) == -1)
 			return ;
-		}
-		else if ((can_compile(coder) == TRUE) && (coder->manager->end_type == RUNNING))
-		{
-			pthread_mutex_unlock(&coder->manager->mutex_manager);
-			if (compile(coder) == -1)
-				return ;
-			pthread_mutex_lock(&coder->coder_mutex);
-			coder->compile_cnt++;
-			pthread_mutex_unlock(&coder->coder_mutex);
-			if (debug(coder) == -1)
-				return ;
-			if (refacto(coder) == -1)
-				return ;
-		}
-		else
-		{
-			pthread_mutex_unlock(&coder->manager->mutex_manager);
-			usleep(1000);
-		}
+}
+
+int	coders_actions(t_coder *coder)
+{
+	pthread_mutex_lock(&coder->manager->mutex_manager);
+	if (coder->manager->end_type != RUNNING)
+	{
+		pthread_mutex_unlock(&coder->manager->mutex_manager);
+		return (-1);
 	}
+	else if ((can_compile(coder) == TRUE)
+		&& (coder->manager->end_type == RUNNING))
+	{
+		pthread_mutex_unlock(&coder->manager->mutex_manager);
+		if (compile(coder) == -1)
+			return (-1);
+		update_compile_count(coder);
+		if (debug(coder) == -1)
+			return (-1);
+		if (refacto(coder) == -1)
+			return (-1);
+	}
+	else
+	{
+		pthread_mutex_unlock(&coder->manager->mutex_manager);
+		usleep(1000);
+	}
+	return (0);
 }
 
 int	can_compile(t_coder *coder)
@@ -92,4 +96,11 @@ int	can_compile(t_coder *coder)
 	if (left == TRUE && right == TRUE)
 		return (TRUE);
 	return (FALSE);
+}
+
+void	update_compile_count(t_coder *coder)
+{
+	pthread_mutex_lock(&coder->coder_mutex);
+	coder->compile_cnt++;
+	pthread_mutex_unlock(&coder->coder_mutex);
 }

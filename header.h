@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 00:29:28 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 00:39:23 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ void			init_utils_coder(t_manager *manager, int index);
 void			assign_const(t_manager *manager, char **argv);
 
 // THREAD UTILS
+int				coders_actions(t_coder *coder);
 int				unlock_and_release(t_coder *coder);
 int				check_burnout_happen(t_coder *coder);
 int				can_compile(t_coder *coder);
@@ -130,6 +131,7 @@ void			my_function(void *manager);
 void			wait_for_start(t_coder *coder);
 void			wait_for_start_manager(t_manager *manager);
 
+void			update_compile_count(t_coder *coder);
 void			take_both_dongle(t_coder *coder);
 void			release_both_dongle(t_coder *coder);
 void			take_dongle(t_dongle *dongle, t_coder *coder);

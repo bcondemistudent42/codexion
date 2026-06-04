@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 00:27:25 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 00:28:40 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 00:39:46 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	init_manager(char **argv, t_manager *manager)
 
 int	handle_one_coder(t_manager *manager)
 {
-	printf("0 %d has taken a dongle\n",manager->coders[0].id);
+	printf("0 %d has taken a dongle\n", manager->coders[0].id);
 	usleep(manager->utils_const[TM_BURNOUT]);
 	printf("%lld %d has burnout\n",
 		manager->utils_const[TM_BURNOUT] + 1, manager->coders[0].id);
