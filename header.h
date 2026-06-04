@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 11:23:05 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 12:05:56 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,11 @@ int		check_dongle(t_dongle *dongle, long long request_time, int coder_id);
 // other to see
 long long	get_time();
 int		parser_manager(int ac, char **argv);
+void compile(t_coder *coder);
+void debug(t_coder *coder);
+void refacto(t_coder *coder);
+int find_closest_burnout(t_dongle *dongle);
+int litlle_burnout(t_dongle *dongle);
+
 
 #endif

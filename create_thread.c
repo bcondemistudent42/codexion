@@ -6,17 +6,11 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 22:59:15 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 12:07:58 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
-void compile(t_coder *coder);
-void debug(t_coder *coder);
-void refacto(t_coder *coder);
-int find_closest_burnout(t_dongle *dongle);
-int litlle_burnout(t_dongle *dongle);
 
 
 int	create_thread(t_manager *manager)
@@ -59,55 +53,15 @@ void	my_function(void *my_coder)
 		if (can_compile(coder) == TRUE)
 		{
 			compile(coder);
-			// to lock and unlock with the coder mutex
 			pthread_mutex_lock(&coder->coder_mutex);
 			coder->compile_cnt++;
 			pthread_mutex_unlock(&coder->coder_mutex);
-			// to lock and unlock with the coder mutex
 			debug(coder);
 			refacto(coder);
 		}
 		else
 			usleep(10);
 	}
-}
-
-int	make_thread_join(t_manager *manager, int index)
-{
-	int	i;
-
-	i = 0;
-	while (i < index)
-	{
-		// check succeded to join thread
-		pthread_join(manager->coders[i].thread_id, NULL);
-		i++;
-	}
-	return (0);
-}
-
-void	wait_for_start(t_coder *coder)
-{
-	pthread_mutex_lock(&coder->manager->protect_nb_ready);
-	coder->manager->nb_ready++;
-	if (coder->manager->nb_ready == coder->utils_const[NB_CODERS])
-		pthread_cond_signal(&coder->manager->cond_ready);
-	while (coder->manager->check_ready == FALSE)
-		pthread_cond_wait(&coder->manager->routine_wait_start,
-			&coder->manager->protect_nb_ready);
-	pthread_mutex_unlock(&coder->manager->protect_nb_ready);
-}
-
-
-void	launch_thread(t_manager *manager)
-{
-	pthread_mutex_lock(&manager->protect_nb_ready);
-	manager->utils_const[TM_START] = get_time();
-	while (manager->nb_ready < manager->utils_const[NB_CODERS])
-		pthread_cond_wait(&manager->cond_ready, &manager->protect_nb_ready);
-	manager->check_ready = TRUE;
-	pthread_cond_broadcast(&manager->routine_wait_start);
-	pthread_mutex_unlock(&manager->protect_nb_ready);
 }
 
 int	can_compile(t_coder *coder)
@@ -126,162 +80,4 @@ int	can_compile(t_coder *coder)
 	if (left == TRUE && right == TRUE)
 		return (TRUE);
 	return (FALSE);
-}
-
-void take_dongle(t_dongle *dongle, t_coder *coder)
-{
-	pthread_mutex_lock(&dongle->dongle_mtx);
-	dongle->available = FALSE;
-	pthread_mutex_lock(&coder->manager->mutex_print);
-	printf("%lld %d has taken a dongle\n",
-		get_time() - dongle->utils_const[TM_START], coder->id);
-	pthread_mutex_unlock(&coder->manager->mutex_print);
-	pthread_mutex_unlock(&dongle->dongle_mtx);
-}
-
-void	take_both_dongle(t_coder *coder)
-{
-	long long	time_took_dongle;
-
-	time_took_dongle = get_time();
-	take_dongle(coder->left, coder);
-	take_dongle(coder->right, coder);
-}
-
-void release_dongle(t_dongle *dongle, long long time_release)
-{
-	pthread_mutex_lock(&dongle->dongle_mtx);
-	dongle->last_time_used = time_release;
-	dongle->available = TRUE;
-	swap_priority(dongle->queue);
-	pthread_mutex_unlock(&dongle->dongle_mtx);
-}
-
-void release_both_dongle(t_coder *coder)
-{
-	long long time_released;
-
-	time_released = get_time();
-	release_dongle(coder->left, time_released);
-	release_dongle(coder->right, time_released);
-	pthread_mutex_lock(&coder->coder_mutex);
-	coder->last_compile = time_released;
-	pthread_mutex_unlock(&coder->coder_mutex);
-}
-
-void	swap_priority(t_coder *queue[2])
-{
-	t_coder	*temp;
-
-	temp = queue[0];
-	queue[0] = queue[1];
-	queue[1] = temp;
-}
-
-int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
-{
-	long long	free_at;
-
-	free_at = dongle->last_time_used + dongle->utils_const[DONGLE_COOLDOWN];
-	if (dongle->available == FALSE)
-		return (FALSE);
-	if (free_at > request_time)
-		return (FALSE);
-	if (*dongle->priority_type == EDF)
-	{
-		if (find_closest_burnout(dongle) != coder_id)
-			return (FALSE);
-	}
-	else
-	{
-		if (dongle->queue[0]->id != coder_id)
-			return (FALSE);
-	}
-	return (TRUE);
-}
-
-// to refacto
-int find_closest_burnout(t_dongle *dongle)
-{
-	int output;
-	t_coder *first_to_lock;
-	t_coder *second_to_lock;
-
-	if (dongle->queue[0]->id < dongle->queue[1]->id)
-	{
-		first_to_lock = dongle->queue[0];
-		second_to_lock = dongle->queue[1];
-	}
-	else
-	{
-		first_to_lock = dongle->queue[1];
-		second_to_lock = dongle->queue[0];
-	}
-	pthread_mutex_lock(&first_to_lock->coder_mutex);
-	pthread_mutex_lock(&second_to_lock->coder_mutex);
-	output = litlle_burnout(dongle);
-	if (output == EQUAL_BURNOUT)
-	{
-		if (dongle->queue[0]->compile_cnt < dongle->queue[1]->compile_cnt)
-			output = (dongle->queue[0]->id);
-		else if (dongle->queue[1]->compile_cnt < dongle->queue[0]->compile_cnt)
-			output = (dongle->queue[1]->id);
-		else
-		{
-			if (dongle->queue[0]->id < dongle->queue[1]->id)
-				output = (dongle->queue[0]->id);
-			else
-				output = (dongle->queue[1]->id);
-		}
-	}
-	pthread_mutex_unlock(&second_to_lock->coder_mutex);
-	pthread_mutex_unlock(&first_to_lock->coder_mutex);
-	return (output);
-}
-
-int litlle_burnout(t_dongle *dongle)
-{
-	int output;
-	long long	first;
-	long long	second;
-
-	first = dongle->queue[0]->last_compile;
-	first += (dongle->utils_const[TM_BURNOUT]) * 1000;
-	second = dongle->queue[1]->last_compile;
-	second += (dongle->utils_const[TM_BURNOUT]) * 1000;
-	if (first < second)
-		output = (dongle->queue[0]->id);
-	else if (second < first)
-		output = (dongle->queue[1]->id);
-	else
-		output = (EQUAL_BURNOUT);
-	return (output);
-}
-
-void compile(t_coder *coder)
-{
-	take_both_dongle(coder);
-	pthread_mutex_lock(&coder->manager->mutex_print);
-	printf("%lld %d is compiling\n",get_time() - coder->utils_const[TM_START], coder->id);
-	pthread_mutex_unlock(&coder->manager->mutex_print);
-	usleep(coder->utils_const[TM_COMPILE] * 1000);
-	release_both_dongle(coder);
-}
-
-void debug(t_coder *coder)
-{
-	pthread_mutex_lock(&coder->manager->mutex_print);
-	printf("%lld %d is debugging\n",
-	get_time() - coder->utils_const[TM_START], coder->id);
-	pthread_mutex_unlock(&coder->manager->mutex_print);
-	usleep(coder->utils_const[TM_DEBUG] * 1000);
-}
-
-void refacto(t_coder *coder)
-{
-	pthread_mutex_lock(&coder->manager->mutex_print);
-	printf("%lld %d is refactoring\n",
-	get_time() - coder->utils_const[TM_START], coder->id);
-	pthread_mutex_unlock(&coder->manager->mutex_print);
-	usleep(coder->utils_const[TM_REFACTO]* 1000);
 }
