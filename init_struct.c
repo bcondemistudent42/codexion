@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 15:22:54 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 16:29:04 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	make_init(t_manager *manager, char **argv)
 		pthread_mutex_destroy(&manager->mutex_print);
 		return (thread_error());
 	}
+	pthread_mutex_init(&manager->mutex_manager, NULL);
+	// to add properly manager mutex
 	assign_const(manager, argv);
 	if (loop_on_coder(manager) == -1)
 		return (-1);
@@ -70,6 +72,7 @@ int	init_coder(int index, t_manager *manager)
 	t_dongle	*norm;
 
 	norm = &manager->dongles[manager->utils_const[NB_CODERS] - 1];
+	manager->coders[index].mutex_manager = &manager->mutex_manager;
 	manager->coders[index].manager = manager;
 	manager->coders[index].id = index + 1;
 	manager->coders[index].last_compile = -1;

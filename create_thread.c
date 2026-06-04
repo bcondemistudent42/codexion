@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 15:26:47 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 16:43:54 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,15 @@ void	my_function(void *my_coder)
 		usleep(1000);
 	while (coder->compile_cnt < coder->utils_const[COMPILE_REQUIRED])
 	{
+		pthread_mutex_lock(&coder->manager->mutex_manager);
 		if (coder->manager->end_type != RUNNING)
-			return ;
-		if ((can_compile(coder) == TRUE) && (coder->manager->end_type == RUNNING))
+			{
+				pthread_mutex_unlock(&coder->manager->mutex_manager);
+				return ;
+			}
+		else if ((can_compile(coder) == TRUE) && (coder->manager->end_type == RUNNING))
 		{
+			pthread_mutex_unlock(&coder->manager->mutex_manager);
 			if (compile(coder) == -1)
 				return ;
 			pthread_mutex_lock(&coder->coder_mutex);
@@ -60,11 +65,15 @@ void	my_function(void *my_coder)
 			pthread_mutex_unlock(&coder->coder_mutex);
 			if (debug(coder) == -1)
 				return ;
-			if (refacto(coder))
+			if (refacto(coder) == -1)
 				return ;
 		}
 		else
-			usleep(10);
+		{
+			pthread_mutex_unlock(&coder->manager->mutex_manager);
+			usleep(1);
+		}
+		// printf("Coder %d, last compile: %lld\n", coder->id, coder->last_compile);
 	}
 	// have to check all time if a burnout happen
 }

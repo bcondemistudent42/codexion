@@ -6,57 +6,44 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:09:30 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 15:39:51 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 17:05:10 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
 // temp
-// int	is_finish(t_manager *manager);
-int	check_finish(t_manager *manager);
+int check_finish(t_manager *manager);
 int check_burnout(t_coder *coder);
 void monitor_checker(void *the_manager);
 int end_type_handler(t_manager *manager);
-int	check_burnout_all_coders(t_manager *manager);
-void	wait_for_start_manager(t_manager *manager);
+int check_burnout_all_coders(t_manager *manager);
+void wait_for_start_manager(t_manager *manager);
 
 int monitor(t_manager *manager)
 {
 	// to protect later
 	pthread_create(&manager->manager_thread, NULL,
-		(void *) monitor_checker, (void *)(manager));
+				   (void *)monitor_checker, (void *)(manager));
 	create_thread(manager);
 	// to protect create thread also
 	while (manager->end_type == RUNNING)
-		usleep(10);
-	if (manager->end_type == BURNOUT_ERROR)
-	{
-		// faire stop tout les threds directement impossible de print quoi que ce soit
-		// peut utilisier mutyex print
-		// to free all
-		pthread_join(manager->manager_thread, NULL);
-	}
-	if (manager->end_type == FINISHED)
-	{
-		// to free all
-		pthread_join(manager->manager_thread, NULL);
-	}
-		return (0);
+		usleep(1);
+	return (0);
 }
 
 void monitor_checker(void *the_manager)
 {
 	t_manager *manager;
 
-	manager = (t_manager *) (the_manager);
+	manager = (t_manager *)(the_manager);
 	wait_for_start_manager(manager);
 	while (end_type_handler(manager) == FALSE)
-		usleep(10);
-	return ;
+		usleep(1);
+	return;
 }
 
-void	wait_for_start_manager(t_manager *manager)
+void wait_for_start_manager(t_manager *manager)
 {
 	pthread_mutex_lock(&manager->protect_nb_ready);
 	manager->nb_ready++;
@@ -64,10 +51,9 @@ void	wait_for_start_manager(t_manager *manager)
 		pthread_cond_signal(&manager->cond_ready);
 	while (manager->check_ready == FALSE)
 		pthread_cond_wait(&manager->routine_wait_start,
-			&manager->protect_nb_ready);
+						  &manager->protect_nb_ready);
 	pthread_mutex_unlock(&manager->protect_nb_ready);
 }
-
 
 int end_type_handler(t_manager *manager)
 {
@@ -75,13 +61,12 @@ int end_type_handler(t_manager *manager)
 		return (TRUE);
 	else if (check_finish(manager) == TRUE)
 		return (TRUE);
-	return  (FALSE);
+	return (FALSE);
 }
 
-
-int	check_finish(t_manager *manager)
+int check_finish(t_manager *manager)
 {
-	int	i;
+	int i;
 	int cnt;
 
 	i = 0;
@@ -96,15 +81,17 @@ int	check_finish(t_manager *manager)
 	}
 	if (cnt == manager->utils_const[NB_CODERS])
 	{
+		pthread_mutex_lock(&manager->mutex_manager);
 		manager->end_type = FINISHED;
+		pthread_mutex_unlock(&manager->mutex_manager);
 		return (TRUE);
 	}
 	return (FALSE);
 }
 
-int	check_burnout_all_coders(t_manager *manager)
+int check_burnout_all_coders(t_manager *manager)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (i < manager->utils_const[NB_CODERS])
@@ -130,12 +117,20 @@ int check_burnout(t_coder *coder)
 		return (FALSE);
 	if (coder->last_compile == -2 || coder->last_compile == -1)
 		return (FALSE);
-	else if (time_check - coder->last_compile > coder->utils_const[TM_BURNOUT])
+	else if (coder->last_compile + (coder->utils_const[TM_BURNOUT]) >= (coder->utils_const[TM_BURNOUT]))
 	{
 		pthread_mutex_lock(&coder->manager->mutex_print);
-		printf("%lld %d has burnout\n", time_check -coder->utils_const[TM_START], coder->id);
+		printf("%lld %d has burnout\n", coder->last_compile + (coder->utils_const[TM_BURNOUT]), coder->id);
 		pthread_mutex_unlock(&coder->manager->mutex_print);
+		pthread_mutex_lock(&coder->manager->mutex_manager);
 		coder->manager->end_type = BURNOUT_ERROR;
+		pthread_mutex_unlock(&coder->manager->mutex_manager);
+		return (TRUE);
 	}
 	return (FALSE);
 }
+
+
+
+// 012345678910
+//   c b

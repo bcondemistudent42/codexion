@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 15:12:08 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 16:24:22 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_dongle
 typedef struct s_Manager
 {
 	int				nb_ready;
+	
 	int				end_type;
 	int				thread_error;
 	int				priority_type;
@@ -70,6 +71,7 @@ typedef struct s_Manager
 	long long		*utils_const;
 	pthread_mutex_t	protect_nb_ready;
 	pthread_mutex_t	mutex_print;
+	pthread_mutex_t	mutex_manager;
 	pthread_cond_t	cond_ready;
 	pthread_cond_t	routine_wait_start;
 	pthread_t	manager_thread;
@@ -101,6 +103,7 @@ struct	s_coder
 	t_manager	*manager;
 	pthread_t	thread_id;
 	pthread_mutex_t coder_mutex;
+	pthread_mutex_t	*mutex_manager;
 	long long	*utils_const;
 };
 
