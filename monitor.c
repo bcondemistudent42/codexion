@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:09:30 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 21:39:45 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 21:56:15 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ int monitor(t_manager *manager)
 {
 	// to protect later
 	pthread_create(&manager->manager_thread, NULL,
-				   (void *)monitor_checker, (void *)(manager));
+				(void *)monitor_checker, (void *)(manager));
 	create_thread(manager);
 	// to protect create thread also
+	pthread_join(manager->manager_thread, NULL);
 	while (manager->end_type == RUNNING)
 		usleep(10);
 	return (0);

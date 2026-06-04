@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 18:30:14 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 21:47:06 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,21 @@ int	make_init(t_manager *manager, char **argv)
 		pthread_mutex_destroy(&manager->mutex_print);
 		return (thread_error());
 	}
-	if (pthread_cond_init(&manager->routine_wait_start, NULL))
+	if (pthread_cond_init(&manager->routine_wait_start, NULL) != 0)
 	{
 		pthread_cond_destroy(&manager->cond_ready);
 		pthread_mutex_destroy(&manager->protect_nb_ready);
 		pthread_mutex_destroy(&manager->mutex_print);
 		return (thread_error());
 	}
-	pthread_mutex_init(&manager->mutex_manager, NULL);
+	if (pthread_mutex_init(&manager->mutex_manager, NULL) != 0)
+	{
+		pthread_cond_destroy(&manager->cond_ready);
+		pthread_cond_destroy(&manager->routine_wait_start);
+		pthread_mutex_destroy(&manager->protect_nb_ready);
+		pthread_mutex_destroy(&manager->mutex_print);
+		return (thread_error());
+	}
 	// to add properly manager mutex
 	assign_const(manager, argv);
 	if (loop_on_coder(manager) == -1)
@@ -75,7 +82,7 @@ int	init_coder(int index, t_manager *manager)
 	manager->coders[index].mutex_manager = &manager->mutex_manager;
 	manager->coders[index].manager = manager;
 	manager->coders[index].id = index + 1;
-	manager->coders[index].last_compile = 1; // to handle this casde maybe in edf directly
+	manager->coders[index].last_compile = 1;
 	if (manager->coders[index].id % 2 == 1)
 		manager->coders[index].last_compile = 0;
 	manager->coders[index].compile_cnt = 0;
