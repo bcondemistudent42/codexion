@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 00:19:15 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 00:29:28 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ int				init_coder(int index, t_manager *manager);
 int				make_init(t_manager *manager, char **argv);
 int				init_manager(char **argv, t_manager *manager);
 void			init_dongle_queue(t_manager *manager, int i);
+void			init_utils_coder(t_manager *manager, int index);
 void			assign_const(t_manager *manager, char **argv);
 
 // THREAD UTILS
@@ -152,6 +153,7 @@ void			monitor_checker(void *the_manager);
 long long		get_time(void);
 
 // CLEAN
+int				free_co_do_ma(t_manager *manager);
 int				custom_clean(t_manager *manager);
 int				ft_error(void);
 int				allocation_error(void);
