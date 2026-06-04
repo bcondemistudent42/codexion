@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 21:47:06 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 22:13:32 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,15 @@ int	make_init(t_manager *manager, char **argv)
 	// to add properly manager mutex
 	assign_const(manager, argv);
 	if (loop_on_coder(manager) == -1)
+	{
+		destroy_const_mutex(manager);
 		return (-1);
+	}
 	if (init_dongle(manager) == -1)
+	{
+		destroy_const_mutex(manager);
 		return (-1);
+	}
 	// to handle if only 1 coder to find a solution to problem
 	// to ask he to make it burn out
 	// to see also if only two element left and right are the same to handle

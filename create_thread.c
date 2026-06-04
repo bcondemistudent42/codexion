@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 20:35:45 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 22:22:21 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	my_function(void *my_coder)
 		else
 		{
 			pthread_mutex_unlock(&coder->manager->mutex_manager);
-			usleep(100);
+			usleep(1000);
 		}
 		// printf("Coder %d, last compile: %lld\n", coder->id, coder->last_compile);
 	}

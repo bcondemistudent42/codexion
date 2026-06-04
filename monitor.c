@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:09:30 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 21:56:15 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 22:22:30 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,22 @@ void wait_for_start_manager(t_manager *manager);
 
 int monitor(t_manager *manager)
 {
-	// to protect later
-	pthread_create(&manager->manager_thread, NULL,
-				(void *)monitor_checker, (void *)(manager));
-	create_thread(manager);
-	// to protect create thread also
+	if (pthread_create(&manager->manager_thread, NULL,
+				(void *)monitor_checker, (void *)(manager)) != 0)
+		return (thread_error());
+		
+	if (create_thread(manager) == -1)
+	{
+		pthread_mutex_lock(&manager->mutex_manager);
+		manager->end_type = FINISHED;
+		pthread_mutex_unlock(&manager->mutex_manager);
+		pthread_join(manager->manager_thread, NULL);
+		return (-1);
+	}
+	
 	pthread_join(manager->manager_thread, NULL);
 	while (manager->end_type == RUNNING)
-		usleep(10);
+		usleep(1000);
 	return (0);
 }
 
@@ -40,7 +48,7 @@ void monitor_checker(void *the_manager)
 	manager = (t_manager *)(the_manager);
 	wait_for_start_manager(manager);
 	while (end_type_handler(manager) == FALSE)
-		usleep(10);
+		usleep(1000);
 	return;
 }
 
