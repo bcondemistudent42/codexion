@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 23:35:08 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 23:38:16 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,18 +106,19 @@ struct	s_coder
 };
 
 // INIT
-int				init_manager(char **argv, t_manager *manager);
-int				make_init(t_manager *manager, char **argv);
-int				init_coder(int index, t_manager *manager);
 int				init_dongle(t_manager *manager);
 int				loop_on_coder(t_manager *manager);
+int				parser_manager(int ac, char **argv);
+int				init_coder(int index, t_manager *manager);
+int				make_init(t_manager *manager, char **argv);
+int				init_manager(char **argv, t_manager *manager);
 void			init_dongle_queue(t_manager *manager, int i);
 void			assign_const(t_manager *manager, char **argv);
 
 // THREAD UTILS
+int				can_compile(t_coder *coder);
 int				create_thread(t_manager *manager);
 int				make_thread_join(t_manager *manager, int index);
-int				can_compile(t_coder *coder);
 int				check_dongle(t_dongle *dongle,
 					long long request_time, int coder_id);
 void			launch_thread(t_manager *manager);
