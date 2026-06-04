@@ -6,12 +6,11 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 12:07:58 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 14:14:16 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
 
 int	create_thread(t_manager *manager)
 {
@@ -62,6 +61,7 @@ void	my_function(void *my_coder)
 		else
 			usleep(10);
 	}
+	// have to check all time if a burnout happen
 }
 
 int	can_compile(t_coder *coder)
