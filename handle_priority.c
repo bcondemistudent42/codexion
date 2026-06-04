@@ -6,18 +6,17 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:05:18 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 12:05:42 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 23:44:27 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-// to refacto
-int find_closest_burnout(t_dongle *dongle)
+int	find_closest_burnout(t_dongle *dongle)
 {
-	int output;
-	t_coder *first_to_lock;
-	t_coder *second_to_lock;
+	int		output;
+	t_coder	*first_to_lock;
+	t_coder	*second_to_lock;
 
 	if (dongle->queue[0]->id < dongle->queue[1]->id)
 	{
@@ -34,26 +33,34 @@ int find_closest_burnout(t_dongle *dongle)
 	output = litlle_burnout(dongle);
 	if (output == EQUAL_BURNOUT)
 	{
-		if (dongle->queue[0]->compile_cnt < dongle->queue[1]->compile_cnt)
-			output = (dongle->queue[0]->id);
-		else if (dongle->queue[1]->compile_cnt < dongle->queue[0]->compile_cnt)
-			output = (dongle->queue[1]->id);
-		else
-		{
-			if (dongle->queue[0]->id < dongle->queue[1]->id)
-				output = (dongle->queue[0]->id);
-			else
-				output = (dongle->queue[1]->id);
-		}
+		output = handle_burnout(dongle);
 	}
 	pthread_mutex_unlock(&second_to_lock->coder_mutex);
 	pthread_mutex_unlock(&first_to_lock->coder_mutex);
 	return (output);
 }
 
-int litlle_burnout(t_dongle *dongle)
+int	handle_burnout(t_dongle *dongle)
 {
-	int output;
+	int	output;
+
+	if (dongle->queue[0]->compile_cnt < dongle->queue[1]->compile_cnt)
+		output = (dongle->queue[0]->id);
+	else if (dongle->queue[1]->compile_cnt < dongle->queue[0]->compile_cnt)
+		output = (dongle->queue[1]->id);
+	else
+	{
+		if (dongle->queue[0]->id < dongle->queue[1]->id)
+			output = (dongle->queue[0]->id);
+		else
+			output = (dongle->queue[1]->id);
+	}
+	return (output);
+}
+
+int	litlle_burnout(t_dongle *dongle)
+{
+	int			output;
 	long long	first;
 	long long	second;
 

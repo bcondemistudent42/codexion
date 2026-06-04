@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:06:34 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 15:46:47 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 23:40:36 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	make_thread_join(t_manager *manager, int index)
 	i = 0;
 	while (i < index)
 	{
-		// check succeded to join thread
 		pthread_join(manager->coders[i].thread_id, NULL);
 		i++;
 	}
@@ -37,7 +36,6 @@ void	wait_for_start(t_coder *coder)
 			&coder->manager->protect_nb_ready);
 	pthread_mutex_unlock(&coder->manager->protect_nb_ready);
 }
-
 
 void	launch_thread(t_manager *manager)
 {

@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 23:38:16 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 23:43:55 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ void			release_dongle(t_dongle *dongle, long long time_release);
 void			swap_priority(t_coder *queue[2]);
 
 // MONITOR
+int				handle_burnout(t_dongle *dongle);
 int				monitor(t_manager *manager);
 int				compile(t_coder *coder);
 int				debug(t_coder *coder);
