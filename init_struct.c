@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 22:36:02 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 11:40:11 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	make_init(t_manager *manager, char **argv)
 		return (thread_error());
 	}
 	assign_const(manager, argv);
-	loop_on_coder(manager);
+	if (loop_on_coder(manager) == -1)
+		return (-1);
 	if (init_dongle(manager) == -1)
 		return (-1);
 	// to handle if only 1 coder to find a solution to problem
@@ -63,7 +64,7 @@ void	assign_const(t_manager *manager, char **argv)
 }
 
 // to change into int to return error if mutex init error
-void	init_coder(int index, t_manager *manager)
+int	init_coder(int index, t_manager *manager)
 {
 	t_dongle	*norm;
 
@@ -76,7 +77,12 @@ void	init_coder(int index, t_manager *manager)
 	manager->coders[index].compile_cnt = 0;
 	manager->coders[index].utils_const = manager->utils_const;
 	// to protect mutex correctly already have done function free coder mutex
-	pthread_mutex_init(&manager->coders[index].coder_mutex, NULL);
+	if (pthread_mutex_init(&manager->coders[index].coder_mutex, NULL) != 0)
+	{
+		destroy_const_mutex(manager);
+		destroy_mutex_coders(manager, index);
+		return (-1);
+	}
 	if (index == 0)
 	{
 		manager->coders[index].left = norm;
@@ -92,18 +98,21 @@ void	init_coder(int index, t_manager *manager)
 		manager->coders[index].left = &manager->dongles[index - 1];
 		manager->coders[index].right = &manager->dongles[index];
 	}
+	return (0);
 }
 
-void	loop_on_coder(t_manager *manager)
+int	loop_on_coder(t_manager *manager)
 {
 	int	i;
 
 	i = 0;
 	while (i < manager->utils_const[NB_CODERS])
 	{
-		init_coder(i, manager);
+		if (init_coder(i, manager) == -1)
+			return (-1);
 		i++;
 	}
+	return (0);
 }
 
 int	init_dongle(t_manager *manager)
@@ -118,6 +127,7 @@ int	init_dongle(t_manager *manager)
 		{
 			destroy_const_mutex(manager);
 			destroy_mutex_dongle(manager, i);
+			destroy_mutex_coders(manager, manager->utils_const[NB_CODERS]);
 			return (thread_error());
 		}
 		manager->dongles[i].available = TRUE;
@@ -142,8 +152,8 @@ void	init_dongle_queue(t_manager *manager, int i)
 	if (i == 0)
 	{
 		manager->dongles[i].queue[0] = &manager->coders[0];
-		manager->dongles[i].queue[1] = &manager->coders[1];
-	}
+		manager->dongles[i].queue[1] = &manager->coders[1]; //to handle when 1 coders make burnout
+	} // carreful here danger of SEGFAULT
 	else if (i == manager->utils_const[NB_CODERS] - 1)
 	{
 		manager->dongles[i].queue[0] = &manager->coders[0];

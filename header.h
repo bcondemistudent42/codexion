@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 22:19:40 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 11:23:05 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,6 @@ struct	s_coder
 	long long	last_compile;
 	t_dongle	*left;
 	t_dongle	*right;
-	// t_state		state;
-	// to create mutex for each
 	t_manager	*manager;
 	pthread_t	thread_id;
 	pthread_mutex_t coder_mutex;
@@ -105,8 +103,8 @@ struct	s_coder
 void	assign_const(t_manager *manager, char **argv);
 void	init_dongle_queue(t_manager *manager, int i);
 int	init_dongle(t_manager *manager);
-void	loop_on_coder(t_manager *manager);
-void	init_coder(int index, t_manager *manager);
+int	loop_on_coder(t_manager *manager);
+int	init_coder(int index, t_manager *manager);
 int		make_init(t_manager *manager, char **argv);
 int		init_manager(char **argv, t_manager *manager);
 

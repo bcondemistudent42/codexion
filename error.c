@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:17:16 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/03 22:33:14 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 11:18:33 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	allocation_error(void)
 
 int	thread_error(void)
 {
-	printf("A mutex init faile\n");
+	printf("A pthread eror occured\n");
 	return (-1);
 }
 
