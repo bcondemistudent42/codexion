@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:09:30 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 17:05:10 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 18:35:02 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,17 +110,22 @@ int check_burnout_all_coders(t_manager *manager)
 
 int check_burnout(t_coder *coder)
 {
+	long long norm;
 	long long time_check;
+	long long temp_last_compile;
 
 	time_check = get_time();
+	if (coder->id % 2 == 0)
+		temp_last_compile = coder->last_compile - 1;
+	else
+		temp_last_compile = coder->last_compile;
+	norm = time_check - coder->utils_const[TM_START];
 	if (coder->manager->end_type != RUNNING)
 		return (FALSE);
-	if (coder->last_compile == -2 || coder->last_compile == -1)
-		return (FALSE);
-	else if (coder->last_compile + (coder->utils_const[TM_BURNOUT]) >= (coder->utils_const[TM_BURNOUT]))
+	else if (norm - temp_last_compile > coder->utils_const[TM_BURNOUT])
 	{
 		pthread_mutex_lock(&coder->manager->mutex_print);
-		printf("%lld %d has burnout\n", coder->last_compile + (coder->utils_const[TM_BURNOUT]), coder->id);
+		printf("%lld %d has burnout\n",norm, coder->id);
 		pthread_mutex_unlock(&coder->manager->mutex_print);
 		pthread_mutex_lock(&coder->manager->mutex_manager);
 		coder->manager->end_type = BURNOUT_ERROR;

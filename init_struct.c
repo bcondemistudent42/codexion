@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 16:29:04 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 18:30:14 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ int	init_coder(int index, t_manager *manager)
 	manager->coders[index].mutex_manager = &manager->mutex_manager;
 	manager->coders[index].manager = manager;
 	manager->coders[index].id = index + 1;
-	manager->coders[index].last_compile = -1;
+	manager->coders[index].last_compile = 1; // to handle this casde maybe in edf directly
 	if (manager->coders[index].id % 2 == 1)
-		manager->coders[index].last_compile = -2;
+		manager->coders[index].last_compile = 0;
 	manager->coders[index].compile_cnt = 0;
 	manager->coders[index].utils_const = manager->utils_const;
 	// to protect mutex correctly already have done function free coder mutex
