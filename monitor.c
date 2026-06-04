@@ -6,16 +6,18 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:09:30 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 14:53:24 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 15:39:51 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
 // temp
-int	is_finish(t_manager *manager);
+// int	is_finish(t_manager *manager);
+int	check_finish(t_manager *manager);
 int check_burnout(t_coder *coder);
 void monitor_checker(void *the_manager);
+int end_type_handler(t_manager *manager);
 int	check_burnout_all_coders(t_manager *manager);
 void	wait_for_start_manager(t_manager *manager);
 
@@ -49,7 +51,7 @@ void monitor_checker(void *the_manager)
 
 	manager = (t_manager *) (the_manager);
 	wait_for_start_manager(manager);
-	while (is_finish(manager) == FALSE)
+	while (end_type_handler(manager) == FALSE)
 		usleep(10);
 	return ;
 }
@@ -66,25 +68,38 @@ void	wait_for_start_manager(t_manager *manager)
 	pthread_mutex_unlock(&manager->protect_nb_ready);
 }
 
-int	is_finish(t_manager *manager)
+
+int end_type_handler(t_manager *manager)
+{
+	if (check_burnout_all_coders(manager) == TRUE)
+		return (TRUE);
+	else if (check_finish(manager) == TRUE)
+		return (TRUE);
+	return  (FALSE);
+}
+
+
+int	check_finish(t_manager *manager)
 {
 	int	i;
-	int output;
+	int cnt;
 
 	i = 0;
-	output = TRUE;
-	check_burnout_all_coders(manager);
-	if (manager->end_type == BURNOUT_ERROR)
-		return (TRUE);
+	cnt = 0;
 	while (i < manager->utils_const[NB_CODERS])
 	{
 		pthread_mutex_lock(&manager->coders[i].coder_mutex);
-		if (manager->coders[i].compile_cnt < manager->utils_const[COMPILE_REQUIRED])
-			output = FALSE;
+		if (manager->coders[i].compile_cnt >= manager->utils_const[COMPILE_REQUIRED])
+			cnt++;
 		pthread_mutex_unlock(&manager->coders[i].coder_mutex);
 		i++;
 	}
-	return (output);
+	if (cnt == manager->utils_const[NB_CODERS])
+	{
+		manager->end_type = FINISHED;
+		return (TRUE);
+	}
+	return (FALSE);
 }
 
 int	check_burnout_all_coders(t_manager *manager)
@@ -96,11 +111,14 @@ int	check_burnout_all_coders(t_manager *manager)
 	{
 		pthread_mutex_lock(&manager->coders[i].coder_mutex);
 		if (check_burnout(&manager->coders[i]) == TRUE)
-			return (-1);
+		{
+			pthread_mutex_unlock(&manager->coders[i].coder_mutex);
+			return (TRUE);
+		}
 		pthread_mutex_unlock(&manager->coders[i].coder_mutex);
 		i++;
 	}
-	return (0);
+	return (FALSE);
 }
 
 int check_burnout(t_coder *coder)
@@ -109,7 +127,7 @@ int check_burnout(t_coder *coder)
 
 	time_check = get_time();
 	if (coder->manager->end_type != RUNNING)
-		return (TRUE);
+		return (FALSE);
 	if (coder->last_compile == -2 || coder->last_compile == -1)
 		return (FALSE);
 	else if (time_check - coder->last_compile > coder->utils_const[TM_BURNOUT])

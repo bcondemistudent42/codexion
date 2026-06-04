@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 14:51:33 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 15:26:47 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,19 @@ void	my_function(void *my_coder)
 		usleep(1000);
 	while (coder->compile_cnt < coder->utils_const[COMPILE_REQUIRED])
 	{
-		if (coder->manager->end_type != RUNNING) //i thought useful to see
+		if (coder->manager->end_type != RUNNING)
 			return ;
-		else if (can_compile(coder) == TRUE)
+		if ((can_compile(coder) == TRUE) && (coder->manager->end_type == RUNNING))
 		{
-			compile(coder);
+			if (compile(coder) == -1)
+				return ;
 			pthread_mutex_lock(&coder->coder_mutex);
 			coder->compile_cnt++;
 			pthread_mutex_unlock(&coder->coder_mutex);
-			debug(coder);
-			refacto(coder);
+			if (debug(coder) == -1)
+				return ;
+			if (refacto(coder))
+				return ;
 		}
 		else
 			usleep(10);

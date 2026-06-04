@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 14:30:16 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 15:22:54 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ int init_manager(char **argv, t_manager *manager)
 {
 	int check_init;
 
-	manager->coders = malloc(sizeof(t_coder) * manager->utils_const[NB_CODERS]);
+manager->coders = malloc(sizeof(t_coder) * manager->utils_const[NB_CODERS]);
 	if (manager->coders == NULL)
 	{
 		free(manager);
