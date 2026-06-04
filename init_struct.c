@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 22:13:32 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 22:50:53 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	make_init(t_manager *manager, char **argv)
 		pthread_mutex_destroy(&manager->mutex_print);
 		return (thread_error());
 	}
-	// to add properly manager mutex
 	assign_const(manager, argv);
 	if (loop_on_coder(manager) == -1)
 	{
@@ -79,7 +78,6 @@ void	assign_const(t_manager *manager, char **argv)
 	manager->utils_const[DONGLE_COOLDOWN] = atoi(argv[7]);
 }
 
-// to change into int to return error if mutex init error
 int	init_coder(int index, t_manager *manager)
 {
 	t_dongle	*norm;
@@ -93,12 +91,10 @@ int	init_coder(int index, t_manager *manager)
 		manager->coders[index].last_compile = 0;
 	manager->coders[index].compile_cnt = 0;
 	manager->coders[index].utils_const = manager->utils_const;
-	// to protect mutex correctly already have done function free coder mutex
 	if (pthread_mutex_init(&manager->coders[index].coder_mutex, NULL) != 0)
 	{
-		destroy_const_mutex(manager);
 		destroy_mutex_coders(manager, index);
-		return (-1);
+		return (thread_error());
 	}
 	if (index == 0)
 	{
@@ -142,7 +138,6 @@ int	init_dongle(t_manager *manager)
 		manager->dongles[i].id = i + 1;
 		if (pthread_mutex_init(&manager->dongles[i].dongle_mtx, NULL) != 0)
 		{
-			destroy_const_mutex(manager);
 			destroy_mutex_dongle(manager, i);
 			destroy_mutex_coders(manager, manager->utils_const[NB_CODERS]);
 			return (thread_error());
@@ -195,7 +190,7 @@ int init_manager(char **argv, t_manager *manager)
 {
 	int check_init;
 
-manager->coders = malloc(sizeof(t_coder) * manager->utils_const[NB_CODERS]);
+	manager->coders = malloc(sizeof(t_coder) * manager->utils_const[NB_CODERS]);
 	if (manager->coders == NULL)
 	{
 		free(manager);
