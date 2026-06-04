@@ -1,29 +1,50 @@
-NAME    = codexion
+NAME        = codexion
 
-CC      = cc
-CFLAGS  = -Wall -Werror -Wextra -g
+SRC_DIR     = coders/
+INC_DIR     = coders/
+OBJ_DIR     = obj
 
-SRC     = $(wildcard *.c)
-OBJ     = $(addprefix obj/, $(SRC:.c=.o))
+FILES       = \
+          clean.c\
+          clean_one.c\
+          coder_state.c\
+          create_thread.c\
+          dongle_utils.c\
+          error.c\
+          handle_priority.c\
+          init_struct.c\
+          init_utils.c\
+          main.c\
+          monitor.c\
+          monitor_utils.c\
+          parser.c\
+          thread_utils.c\
+          time_keeper.c
+
+SRCS        = $(addprefix $(SRC_DIR)/, $(FILES))
+OBJS        = $(addprefix $(OBJ_DIR)/, $(FILES:.c=.o))
+DEPS        = $(addprefix $(OBJ_DIR)/, $(FILES:.c=.d))
+
+CC          = cc
+CFLAGS      = -Wall -Wextra -Werror -MMD -I$(INC_DIR) -g3 -pthread
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-malloc_test: $(OBJ)
-	$(CC) $(CFLAGS) -fsanitize=undefined -rdynamic $(OBJ) -o $@ -L. -lmallocator
-
-obj/%.o: %.c header.h
-	@mkdir -p obj
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c Makefile
+	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf obj/
+	rm -rf $(OBJ_DIR)
 
 fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re malloc_test
+-include $(DEPS)
+
+.PHONY: all clean fclean re
