@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 22:50:53 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 23:13:36 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,24 @@ int	make_init(t_manager *manager, char **argv)
 	if (loop_on_coder(manager) == -1)
 	{
 		destroy_const_mutex(manager);
+		pthread_mutex_destroy(&manager->mutex_manager);
 		return (-1);
 	}
 	if (init_dongle(manager) == -1)
 	{
 		destroy_const_mutex(manager);
+		pthread_mutex_destroy(&manager->mutex_manager);
 		return (-1);
 	}
-	// to handle if only 1 coder to find a solution to problem
-	// to ask he to make it burn out
-	// to see also if only two element left and right are the same to handle
+	if (manager->utils_const[NB_CODERS] == 1)
+	{
+		printf("0 %d has taken a dongle\n",manager->coders[0].id);
+		usleep(manager->utils_const[TM_BURNOUT]);
+		printf("%lld %d has burnout\n", manager->utils_const[TM_BURNOUT] + 1,  manager->coders[0].id);
+		destroy_const_mutex(manager);
+		pthread_mutex_destroy(&manager->mutex_manager);
+		return (0);
+	}
 	return (0);
 }
 

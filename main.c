@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 19:05:51 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 23:14:14 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ int	main(int ac, char **argv)
 	manager->utils_const[NB_CODERS] = atoi(argv[1]);
 	if (init_manager(argv, manager) == -1)
 		return (-1);
+	if (manager->utils_const[NB_CODERS] == 1)
+	{
+		final_clean(manager);
+		return (0);
+	}
 	if (monitor(manager) == -1)
 	{
 		final_clean(manager);

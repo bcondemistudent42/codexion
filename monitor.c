@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:09:30 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 22:57:59 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 23:15:19 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void monitor_checker(void *the_manager)
 void wait_for_start_manager(t_manager *manager)
 {
 	pthread_mutex_lock(&manager->protect_nb_ready);
-	manager->nb_ready++;
 	if (manager->nb_ready == manager->utils_const[NB_CODERS])
 		pthread_cond_signal(&manager->cond_ready);
 	while (manager->check_ready == FALSE)
