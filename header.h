@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 23:43:55 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 00:19:15 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ struct	s_coder
 };
 
 // INIT
+int				big_check_mutex(t_manager *manager);
 int				init_dongle(t_manager *manager);
 int				loop_on_coder(t_manager *manager);
 int				parser_manager(int ac, char **argv);
@@ -116,6 +117,8 @@ void			init_dongle_queue(t_manager *manager, int i);
 void			assign_const(t_manager *manager, char **argv);
 
 // THREAD UTILS
+int				unlock_and_release(t_coder *coder);
+int				check_burnout_happen(t_coder *coder);
 int				can_compile(t_coder *coder);
 int				create_thread(t_manager *manager);
 int				make_thread_join(t_manager *manager, int index);
@@ -133,6 +136,7 @@ void			release_dongle(t_dongle *dongle, long long time_release);
 void			swap_priority(t_coder *queue[2]);
 
 // MONITOR
+int				handle_one_coder(t_manager *manager);
 int				handle_burnout(t_dongle *dongle);
 int				monitor(t_manager *manager);
 int				compile(t_coder *coder);
@@ -148,10 +152,12 @@ void			monitor_checker(void *the_manager);
 long long		get_time(void);
 
 // CLEAN
+int				custom_clean(t_manager *manager);
 int				ft_error(void);
 int				allocation_error(void);
 int				thread_error(void);
 void			final_clean(t_manager *manager);
+void			one_coder_clean(t_manager *manager);
 void			destroy_const_mutex(t_manager *manager);
 void			destroy_mutex_dongle(t_manager *manager, int max);
 void			destroy_mutex_coders(t_manager *manager, int max);

@@ -6,14 +6,13 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:03:52 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 20:45:14 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 00:00:34 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-
-void take_dongle(t_dongle *dongle, t_coder *coder)
+void	take_dongle(t_dongle *dongle, t_coder *coder)
 {
 	pthread_mutex_lock(&dongle->dongle_mtx);
 	dongle->available = FALSE;
@@ -33,7 +32,7 @@ void	take_both_dongle(t_coder *coder)
 	take_dongle(coder->right, coder);
 }
 
-void release_dongle(t_dongle *dongle, long long time_release)
+void	release_dongle(t_dongle *dongle, long long time_release)
 {
 	pthread_mutex_lock(&dongle->dongle_mtx);
 	dongle->last_time_used = time_release;
@@ -42,9 +41,9 @@ void release_dongle(t_dongle *dongle, long long time_release)
 	pthread_mutex_unlock(&dongle->dongle_mtx);
 }
 
-void release_both_dongle(t_coder *coder)
+void	release_both_dongle(t_coder *coder)
 {
-	long long time_released;
+	long long	time_released;
 
 	time_released = get_time();
 	release_dongle(coder->left, time_released);

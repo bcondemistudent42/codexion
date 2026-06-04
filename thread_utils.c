@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:06:34 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 23:40:36 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 23:59:20 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,11 @@ void	launch_thread(t_manager *manager)
 	manager->check_ready = TRUE;
 	pthread_cond_broadcast(&manager->routine_wait_start);
 	pthread_mutex_unlock(&manager->protect_nb_ready);
+}
+
+int	unlock_and_release(t_coder *coder)
+{
+	pthread_mutex_unlock(&coder->manager->mutex_manager);
+	release_both_dongle(coder);
+	return (-1);
 }

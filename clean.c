@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 23:39:20 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 23:39:39 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 23:52:21 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,14 @@ void	final_clean(t_manager *manager)
 	free(manager->coders);
 	free(manager->dongles);
 	pthread_mutex_destroy(&manager->mutex_manager);
+	free(manager);
+}
+
+void	one_coder_clean(t_manager *manager)
+{
+	destroy_mutex_dongle(manager, manager->utils_const[NB_CODERS]);
+	destroy_mutex_coders(manager, manager->utils_const[NB_CODERS]);
+	free(manager->coders);
+	free(manager->dongles);
 	free(manager);
 }

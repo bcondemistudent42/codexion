@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 23:23:42 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 23:52:48 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int ac, char **argv)
 		return (-1);
 	if (manager->utils_const[NB_CODERS] == 1)
 	{
-		final_clean(manager);
+		one_coder_clean(manager);
 		return (0);
 	}
 	if (monitor(manager) == -1)
