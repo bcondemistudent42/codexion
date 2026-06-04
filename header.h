@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 13:41:42 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 14:30:32 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_dongle
 typedef struct s_Manager
 {
 	int				nb_ready;
+	int				end_type;
 	int				thread_error;
 	int				priority_type;
 	int				check_ready;
@@ -77,7 +78,10 @@ typedef struct s_Manager
 
 typedef enum e_utils
 {
-	EQUAL_BURNOUT = -1
+	EQUAL_BURNOUT = -1,
+	BURNOUT_ERROR,
+	RUNNING,
+	FINISHED
 }	t_utils;
 
 typedef enum e_scheduler

@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 14:16:35 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 14:30:16 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	assign_const(t_manager *manager, char **argv)
 	manager->nb_ready = 0;
 	manager->thread_error = FALSE;
 	manager->check_ready = FALSE;
+	manager->end_type = RUNNING;
 	if (strcmp(argv[8], "fifo") == 0)
 		manager->priority_type = FIFO;
 	else
