@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:09:30 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 18:35:02 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 19:02:34 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int monitor(t_manager *manager)
 	create_thread(manager);
 	// to protect create thread also
 	while (manager->end_type == RUNNING)
-		usleep(1);
+		usleep(10);
 	return (0);
 }
 
@@ -39,7 +39,7 @@ void monitor_checker(void *the_manager)
 	manager = (t_manager *)(the_manager);
 	wait_for_start_manager(manager);
 	while (end_type_handler(manager) == FALSE)
-		usleep(1);
+		usleep(10);
 	return;
 }
 
@@ -134,8 +134,3 @@ int check_burnout(t_coder *coder)
 	}
 	return (FALSE);
 }
-
-
-
-// 012345678910
-//   c b
