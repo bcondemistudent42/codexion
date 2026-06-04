@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 16:41:25 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 19:05:51 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,10 @@ int	main(int ac, char **argv)
 	return (0);
 }
 
-// to do function protect all mutex
-// to protect all mutex of all coders
-// to readapt free function and everything to clean dongle mutex
+// monitor handle all possible error
+// clean all again
 // to do the monitor stuff to handle each coder and time correctly
-
-
+// norm all
 // to do the makefiel without wildcard at the end
 
 // 	}

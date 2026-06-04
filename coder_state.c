@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:02:48 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 16:50:18 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 20:54:38 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int compile(t_coder *coder)
 	pthread_mutex_lock(&coder->manager->mutex_manager);
 	if (coder->manager->end_type != RUNNING)
 	{
+		pthread_mutex_unlock(&coder->manager->mutex_manager);
 		release_both_dongle(coder);
 		return (-1);
 	}

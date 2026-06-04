@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 16:24:22 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 20:01:34 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,5 +148,11 @@ int refacto(t_coder *coder);
 int find_closest_burnout(t_dongle *dongle);
 int litlle_burnout(t_dongle *dongle);
 int monitor(t_manager *manager);
+int check_finish(t_manager *manager);
+int check_burnout(t_coder *coder);
+void monitor_checker(void *the_manager);
+int end_type_handler(t_manager *manager);
+int check_burnout_all_coders(t_manager *manager);
+void wait_for_start_manager(t_manager *manager);
 
 #endif

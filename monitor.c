@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:09:30 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 19:02:34 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 21:39:45 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,24 +88,33 @@ int check_finish(t_manager *manager)
 	}
 	return (FALSE);
 }
-
 int check_burnout_all_coders(t_manager *manager)
 {
 	int i;
+	int output;
+	long long time_of_death;
 
 	i = 0;
+	output = FALSE;
 	while (i < manager->utils_const[NB_CODERS])
 	{
 		pthread_mutex_lock(&manager->coders[i].coder_mutex);
-		if (check_burnout(&manager->coders[i]) == TRUE)
-		{
-			pthread_mutex_unlock(&manager->coders[i].coder_mutex);
-			return (TRUE);
-		}
+		output = check_burnout(&manager->coders[i]);
 		pthread_mutex_unlock(&manager->coders[i].coder_mutex);
+		if (output == TRUE)
+		{
+			time_of_death = get_time() - manager->utils_const[TM_START];
+			pthread_mutex_lock(&manager->mutex_print);
+			printf("%lld %d has burnout\n", time_of_death, manager->coders[i].id);
+			pthread_mutex_unlock(&manager->mutex_print);
+			pthread_mutex_lock(&manager->mutex_manager);
+			manager->end_type = BURNOUT_ERROR;
+			pthread_mutex_unlock(&manager->mutex_manager);
+			break;
+		}
 		i++;
 	}
-	return (FALSE);
+	return (output);
 }
 
 int check_burnout(t_coder *coder)
@@ -120,17 +129,9 @@ int check_burnout(t_coder *coder)
 	else
 		temp_last_compile = coder->last_compile;
 	norm = time_check - coder->utils_const[TM_START];
-	if (coder->manager->end_type != RUNNING)
-		return (FALSE);
-	else if (norm - temp_last_compile > coder->utils_const[TM_BURNOUT])
-	{
-		pthread_mutex_lock(&coder->manager->mutex_print);
-		printf("%lld %d has burnout\n",norm, coder->id);
-		pthread_mutex_unlock(&coder->manager->mutex_print);
-		pthread_mutex_lock(&coder->manager->mutex_manager);
-		coder->manager->end_type = BURNOUT_ERROR;
-		pthread_mutex_unlock(&coder->manager->mutex_manager);
+	
+	if (norm - temp_last_compile > coder->utils_const[TM_BURNOUT])
 		return (TRUE);
-	}
+		
 	return (FALSE);
 }

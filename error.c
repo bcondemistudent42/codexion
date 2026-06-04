@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:17:16 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 11:18:33 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/04 20:55:31 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void destroy_mutex_coders(t_manager *manager, int max)
 	i = 0;
 	while (i < max)
 	{
+		pthread_mutex_trylock(&manager->coders[i].coder_mutex);
+		pthread_mutex_unlock(&manager->coders[i].coder_mutex);
 		pthread_mutex_destroy(&manager->coders[i].coder_mutex);
 		i++;
 	}
