@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 00:32:35 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 13:51:18 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 13:55:40 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,20 +78,14 @@ int	check_burnout_all_coders(t_manager *manager)
 
 int	check_burnout(t_coder *coder)
 {
-
 	long long	real_compile;
 	long long	time_burnout;
 
-	// if (coder->id % 2 == 0)
-		// real_compile = coder->last_compile - 1;
-	// else
-	real_compile = coder->last_compile;
+	if (coder->id % 2 == 0)
+		real_compile = coder->last_compile - 1;
+	else
+		real_compile = coder->last_compile;
 	time_burnout = real_compile + coder->utils_const[TM_BURNOUT];
-	// printf("\n===============");
-	// printf("\nCoder: %d, Last compile: %lld\n", coder->id, coder->last_compile);
-	// printf("Time burnout: %lld, ", time_burnout);
-	// printf("Actual time: %lld\n", get_time());
-	// printf("===============\n");
 	if (get_time() > time_burnout)
 		return (TRUE);
 	return (FALSE);

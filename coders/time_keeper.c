@@ -6,12 +6,11 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 16:23:50 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 11:55:52 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 13:54:08 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
 
 static struct timeval	*get_start_time(void)
 {
@@ -31,7 +30,7 @@ long long	get_time(void)
 	struct timeval			*start_time;
 	long					seconds;
 	long					microseconds;
-	long long						ms_time;
+	long long				ms_time;
 
 	start_time = get_start_time();
 	gettimeofday(&current_time, NULL);
