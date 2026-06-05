@@ -6,11 +6,11 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:06:34 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 12:06:33 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 15:00:50 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "codexion.h"
 
 int	make_thread_join(t_manager *manager, int index)
 {
