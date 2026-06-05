@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:03:52 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 18:57:57 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 20:06:19 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	take_dongle(t_dongle *dongle, t_coder *coder)
 
 void	take_both_dongle(t_coder *coder)
 {
-
 	take_dongle(coder->left, coder);
 	take_dongle(coder->right, coder);
 }

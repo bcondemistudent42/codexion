@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 15:05:41 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 15:05:51 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 20:08:12 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef enum Const
 	TM_DEBUG,
 	TM_REFACTO,
 	COMPILE_REQUIRED,
-	DONGLE_COOLDOWN,
+	DONGLE_CD,
 	NB_CODERS
 }	t_const;
 

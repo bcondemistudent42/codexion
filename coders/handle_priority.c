@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:05:18 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 15:00:47 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 20:08:26 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	check_dongle(t_dongle *dongle, int coder_id)
 {
 	long long	free_at;
 
-	free_at = dongle->last_time_used + dongle->utils_const[DONGLE_COOLDOWN];
+	free_at = dongle->last_time_used + dongle->utils_const[DONGLE_CD];
 	if (dongle->available == FALSE)
 		return (FALSE);
 	if (free_at > get_time())
