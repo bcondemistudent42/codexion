@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 12:03:57 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 13:46:57 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,7 @@ int				check_burnout_happen(t_coder *coder);
 int				can_compile(t_coder *coder);
 int				create_thread(t_manager *manager);
 int				make_thread_join(t_manager *manager, int index);
-int				check_dongle(t_dongle *dongle,
-					long long request_time, int coder_id);
+int				check_dongle(t_dongle *dongle, int coder_id);
 void			launch_thread(t_manager *manager);
 void			my_function(void *manager);
 void			wait_for_start(t_coder *coder);

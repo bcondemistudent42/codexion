@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 00:27:25 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 01:14:21 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 13:43:32 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	init_utils_coder(t_manager *manager, int index)
 	manager->coders[index].mutex_manager = &manager->mutex_manager;
 	manager->coders[index].manager = manager;
 	manager->coders[index].id = index + 1;
-	manager->coders[index].last_compile = 1;
+	manager->coders[index].last_compile = 0;
 	if (manager->coders[index].id % 2 == 1)
 		manager->coders[index].last_compile = 0;
 	manager->coders[index].compile_cnt = 0;

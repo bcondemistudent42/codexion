@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:05:18 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 23:44:27 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 13:46:43 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,14 @@ int	litlle_burnout(t_dongle *dongle)
 	return (output);
 }
 
-int	check_dongle(t_dongle *dongle, long long request_time, int coder_id)
+int	check_dongle(t_dongle *dongle, int coder_id)
 {
 	long long	free_at;
 
 	free_at = dongle->last_time_used + dongle->utils_const[DONGLE_COOLDOWN];
 	if (dongle->available == FALSE)
 		return (FALSE);
-	if (free_at > request_time)
+	if (free_at > get_time())
 		return (FALSE);
 	if (*dongle->priority_type == EDF)
 	{

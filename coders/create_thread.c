@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 12:06:04 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 13:47:10 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,10 @@ int	can_compile(t_coder *coder)
 
 	request_time = get_time();
 	pthread_mutex_lock(&coder->left->dongle_mtx);
-	left = check_dongle(coder->left, request_time, coder->id);
+	left = check_dongle(coder->left, coder->id);
 	pthread_mutex_unlock(&coder->left->dongle_mtx);
 	pthread_mutex_lock(&coder->right->dongle_mtx);
-	right = check_dongle(coder->right, request_time, coder->id);
+	right = check_dongle(coder->right, coder->id);
 	pthread_mutex_unlock(&coder->right->dongle_mtx);
 	if (left == TRUE && right == TRUE)
 		return (TRUE);

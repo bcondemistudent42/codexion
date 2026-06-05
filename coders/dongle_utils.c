@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:03:52 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 12:01:40 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 13:50:15 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	take_dongle(t_dongle *dongle, t_coder *coder)
 {
 	pthread_mutex_lock(&dongle->dongle_mtx);
 	dongle->available = FALSE;
+	dongle->last_time_used = get_time();
 	pthread_mutex_lock(&coder->manager->mutex_print);
 	printf("%lld %d has taken a dongle\n",
 		get_time(), coder->id);
@@ -48,9 +49,6 @@ void	release_both_dongle(t_coder *coder)
 	time_released = get_time();
 	release_dongle(coder->left, time_released);
 	release_dongle(coder->right, time_released);
-	pthread_mutex_lock(&coder->coder_mutex);
-	coder->last_compile = time_released;
-	pthread_mutex_unlock(&coder->coder_mutex);
 }
 
 void	swap_priority(t_coder *queue[2])
