@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:02:48 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 13:35:14 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 14:28:50 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ int	compile(t_coder *coder)
 	long long	actual_time;
 
 	take_both_dongle(coder);
+	compile_print(coder);
 	if (check_burnout_happen(coder) == -1)
 		return (-1);
 	pthread_mutex_lock(&coder->coder_mutex);
 	coder->last_compile = get_time();
 	pthread_mutex_unlock(&coder->coder_mutex);
-	compile_print(coder);
 	actual_time = get_time();
 	wake_up = actual_time + (coder->utils_const[TM_COMPILE]);
 	while (actual_time < wake_up)

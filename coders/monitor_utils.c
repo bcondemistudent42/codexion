@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 00:32:35 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 14:03:30 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 14:30:06 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,9 @@ int	check_burnout(t_coder *coder)
 	long long	time_burnout;
 
 	if (coder->id % 2 == 0)
-		real_compile = coder->last_compile - 1;
-	else
 		real_compile = coder->last_compile;
+	else
+		real_compile = coder->last_compile + 1;
 	time_burnout = real_compile + coder->utils_const[TM_BURNOUT];
 	if (get_time() > time_burnout)
 		return (TRUE);
