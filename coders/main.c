@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 15:00:48 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/06 00:14:14 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,5 @@ int	main(int ac, char **argv)
 	return (0);
 }
 
-// norm all
-// to do the makefiel without wildcard at the end
+// to check ./codexion 100 105 50 2 1 5 1 edf
+// sometimes crashing on pc
