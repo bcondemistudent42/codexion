@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:10:55 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 15:00:48 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 18:58:30 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	init_dongle(t_manager *manager)
 			return (thread_error());
 		}
 		manager->dongles[i].available = TRUE;
-		manager->dongles[i].last_time_used = 0;
+		manager->dongles[i].last_time_used = -manager->utils_const[DONGLE_COOLDOWN];
 		manager->dongles[i].priority_type = &manager->priority_type;
 		manager->dongles[i].utils_const = manager->utils_const;
 		init_dongle_queue(manager, i);

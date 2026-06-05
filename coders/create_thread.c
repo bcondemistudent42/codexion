@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 15:53:03 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 15:00:46 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 18:57:50 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,7 @@ int	can_compile(t_coder *coder)
 {
 	int			left;
 	int			right;
-	long long	request_time;
 
-	request_time = get_time();
 	pthread_mutex_lock(&coder->left->dongle_mtx);
 	left = check_dongle(coder->left, coder->id);
 	pthread_mutex_unlock(&coder->left->dongle_mtx);
