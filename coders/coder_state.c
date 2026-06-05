@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:02:48 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 23:59:50 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 12:01:30 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	compile(t_coder *coder)
 		return (-1);
 	compile_print(coder);
 	pthread_mutex_lock(&coder->coder_mutex);
-	coder->last_compile = get_time() - coder->utils_const[TM_START];
+	coder->last_compile = get_time();
 	pthread_mutex_unlock(&coder->coder_mutex);
 	actual_time = get_time();
 	wake_up = actual_time + (coder->utils_const[TM_COMPILE]);
@@ -51,7 +51,7 @@ int	debug(t_coder *coder)
 	pthread_mutex_unlock(&coder->manager->mutex_manager);
 	pthread_mutex_lock(&coder->manager->mutex_print);
 	printf("%lld %d is debugging\n",
-		get_time() - coder->utils_const[TM_START], coder->id);
+		get_time(), coder->id);
 	pthread_mutex_unlock(&coder->manager->mutex_print);
 	actual_time = get_time();
 	wake_up = actual_time + (coder->utils_const[TM_DEBUG]);
@@ -80,7 +80,7 @@ int	refacto(t_coder *coder)
 	pthread_mutex_unlock(&coder->manager->mutex_manager);
 	pthread_mutex_lock(&coder->manager->mutex_print);
 	printf("%lld %d is refactoring\n",
-		get_time() - coder->utils_const[TM_START], coder->id);
+		get_time(), coder->id);
 	pthread_mutex_unlock(&coder->manager->mutex_print);
 	actual_time = get_time();
 	wake_up = actual_time + (coder->utils_const[TM_REFACTO]);
@@ -115,6 +115,6 @@ void	compile_print(t_coder *coder)
 {
 	pthread_mutex_lock(&coder->manager->mutex_print);
 	printf("%lld %d is compiling\n",
-		get_time() - coder->utils_const[TM_START], coder->id);
+		get_time(), coder->id);
 	pthread_mutex_unlock(&coder->manager->mutex_print);
 }

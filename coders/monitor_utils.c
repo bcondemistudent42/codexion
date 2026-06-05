@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 00:32:35 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 00:33:03 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 12:02:01 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	check_burnout_all_coders(t_manager *manager)
 		pthread_mutex_unlock(&manager->coders[i].coder_mutex);
 		if (output == TRUE)
 		{
-			time_of_death = get_time() - manager->utils_const[TM_START];
+			time_of_death = get_time();
 			pthread_mutex_lock(&manager->mutex_print);
 			printf("%lld %d has burnout\n",
 				time_of_death, manager->coders[i].id);
@@ -87,7 +87,7 @@ int	check_burnout(t_coder *coder)
 		temp_last_compile = coder->last_compile - 1;
 	else
 		temp_last_compile = coder->last_compile;
-	norm = time_check - coder->utils_const[TM_START];
+	norm = time_check;
 	if (norm - temp_last_compile > coder->utils_const[TM_BURNOUT])
 		return (TRUE);
 	return (FALSE);

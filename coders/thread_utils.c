@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:06:34 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 23:59:20 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 12:06:33 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	wait_for_start(t_coder *coder)
 void	launch_thread(t_manager *manager)
 {
 	pthread_mutex_lock(&manager->protect_nb_ready);
-	manager->utils_const[TM_START] = get_time();
+	start_timestamp();
 	while (manager->nb_ready < manager->utils_const[NB_CODERS])
 		pthread_cond_wait(&manager->cond_ready, &manager->protect_nb_ready);
 	manager->check_ready = TRUE;

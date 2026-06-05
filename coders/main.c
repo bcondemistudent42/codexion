@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:42:19 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/04 23:52:48 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 11:58:23 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int ac, char **argv)
 {
-	long long		utils_const[8];
+	long long		utils_const[7];
 	t_manager		*manager;
 
 	if (parser_manager(ac, argv) == -1)

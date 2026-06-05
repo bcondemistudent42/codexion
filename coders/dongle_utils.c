@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:03:52 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 00:00:34 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 12:01:40 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	take_dongle(t_dongle *dongle, t_coder *coder)
 	dongle->available = FALSE;
 	pthread_mutex_lock(&coder->manager->mutex_print);
 	printf("%lld %d has taken a dongle\n",
-		get_time() - dongle->utils_const[TM_START], coder->id);
+		get_time(), coder->id);
 	pthread_mutex_unlock(&coder->manager->mutex_print);
 	pthread_mutex_unlock(&dongle->dongle_mtx);
 }

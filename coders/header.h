@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:14:28 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 00:39:23 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 12:03:57 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ typedef enum Const
 	TM_REFACTO,
 	COMPILE_REQUIRED,
 	DONGLE_COOLDOWN,
-	TM_START,
 	NB_CODERS
 }	t_const;
 
@@ -152,6 +151,7 @@ int				find_closest_burnout(t_dongle *dongle);
 int				check_finish(t_manager *manager);
 int				end_type_handler(t_manager *manager);
 void			monitor_checker(void *the_manager);
+void			start_timestamp(void);
 long long		get_time(void);
 
 // CLEAN
