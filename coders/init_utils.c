@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 00:27:25 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 13:51:56 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 14:03:14 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	handle_one_coder(t_manager *manager)
 {
 	printf("0 %d has taken a dongle\n", manager->coders[0].id);
 	usleep(manager->utils_const[TM_BURNOUT] * 1000);
-	printf("%lld %d has burnout\n",
+	printf("%lld %d burned out\n",
 		manager->utils_const[TM_BURNOUT] + 1, manager->coders[0].id);
 	destroy_const_mutex(manager);
 	pthread_mutex_destroy(&manager->mutex_manager);

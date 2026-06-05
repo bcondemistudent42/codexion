@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 00:32:35 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 13:55:40 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/05 14:03:30 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	check_burnout_all_coders(t_manager *manager)
 		{
 			time_of_death = get_time();
 			pthread_mutex_lock(&manager->mutex_print);
-			printf("%lld %d has burnout\n",
+			printf("%lld %d burned out\n",
 				time_of_death, manager->coders[i].id);
 			pthread_mutex_unlock(&manager->mutex_print);
 			pthread_mutex_lock(&manager->mutex_manager);
