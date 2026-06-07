@@ -6,21 +6,23 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:02:48 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 15:00:39 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/07 14:24:59 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-void	compile_print(t_coder *coder);
+int	compile_print(t_coder *coder);
 
 int	compile(t_coder *coder)
 {
 	long long	wake_up;
 	long long	actual_time;
 
-	take_both_dongle(coder);
-	compile_print(coder);
+	if (take_both_dongle(coder) == -1)
+		return (-1);
+	if (compile_print(coder) == -1)
+		return (-1);
 	if (check_burnout_happen(coder) == -1)
 		return (-1);
 	pthread_mutex_lock(&coder->coder_mutex);
@@ -45,10 +47,8 @@ int	debug(t_coder *coder)
 	long long	wake_up;
 	long long	actual_time;
 
-	pthread_mutex_lock(&coder->manager->mutex_manager);
-	if (coder->manager->end_type != RUNNING)
+	if (check_burnout_happen(coder) == -1)
 		return (-1);
-	pthread_mutex_unlock(&coder->manager->mutex_manager);
 	pthread_mutex_lock(&coder->manager->mutex_print);
 	printf("%lld %d is debugging\n",
 		get_time(), coder->id);
@@ -74,10 +74,8 @@ int	refacto(t_coder *coder)
 	long long	wake_up;
 	long long	actual_time;
 
-	pthread_mutex_lock(&coder->manager->mutex_manager);
-	if (coder->manager->end_type != RUNNING)
+	if (check_burnout_happen(coder) == -1)
 		return (-1);
-	pthread_mutex_unlock(&coder->manager->mutex_manager);
 	pthread_mutex_lock(&coder->manager->mutex_print);
 	printf("%lld %d is refactoring\n",
 		get_time(), coder->id);
@@ -104,17 +102,22 @@ int	check_burnout_happen(t_coder *coder)
 	if (coder->manager->end_type != RUNNING)
 	{
 		pthread_mutex_unlock(&coder->manager->mutex_manager);
-		release_both_dongle(coder);
 		return (-1);
 	}
 	pthread_mutex_unlock(&coder->manager->mutex_manager);
 	return (0);
 }
 
-void	compile_print(t_coder *coder)
+int	compile_print(t_coder *coder)
 {
+	if (check_burnout_happen(coder) == -1)
+	{
+		release_both_dongle(coder);
+		return (-1);
+	}
 	pthread_mutex_lock(&coder->manager->mutex_print);
 	printf("%lld %d is compiling\n",
 		get_time(), coder->id);
 	pthread_mutex_unlock(&coder->manager->mutex_print);
+	return (0);
 }

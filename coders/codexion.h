@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 15:05:41 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 20:08:12 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/07 14:24:47 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,13 +124,12 @@ int				can_compile(t_coder *coder);
 int				create_thread(t_manager *manager);
 int				make_thread_join(t_manager *manager, int index);
 int				check_dongle(t_dongle *dongle, int coder_id);
+int				take_both_dongle(t_coder *coder);
 void			launch_thread(t_manager *manager);
 void			my_function(void *manager);
 void			wait_for_start(t_coder *coder);
 void			wait_for_start_manager(t_manager *manager);
-
 void			update_compile_count(t_coder *coder);
-void			take_both_dongle(t_coder *coder);
 void			release_both_dongle(t_coder *coder);
 void			take_dongle(t_dongle *dongle, t_coder *coder);
 void			release_dongle(t_dongle *dongle, long long time_release);

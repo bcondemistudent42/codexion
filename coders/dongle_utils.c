@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:03:52 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 20:06:19 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/07 14:08:49 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,13 @@ void	take_dongle(t_dongle *dongle, t_coder *coder)
 	pthread_mutex_unlock(&dongle->dongle_mtx);
 }
 
-void	take_both_dongle(t_coder *coder)
+int	take_both_dongle(t_coder *coder)
 {
+	if (check_burnout_happen(coder) == -1)
+		return (-1);
 	take_dongle(coder->left, coder);
 	take_dongle(coder->right, coder);
+	return (0);
 }
 
 void	release_dongle(t_dongle *dongle, long long time_release)

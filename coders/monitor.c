@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:09:30 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 15:00:49 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/07 14:12:31 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	monitor(t_manager *manager)
 	}
 	pthread_join(manager->manager_thread, NULL);
 	while (manager->end_type == RUNNING)
-		usleep(1000);
+		usleep(100);
 	return (0);
 }
 
