@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 15:05:41 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/07 14:24:47 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/09 13:51:45 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 typedef struct s_coder	t_coder;
 
-typedef enum Const
+typedef enum e_const
 {
 	TM_BURNOUT,
 	TM_COMPILE,
@@ -33,13 +33,13 @@ typedef enum Const
 	NB_CODERS
 }	t_const;
 
-typedef enum Bool
+typedef enum e_bool
 {
 	FALSE,
 	TRUE
 }	t_bool;
 
-typedef enum Queu_Type
+typedef enum e_queu_type
 {
 	EDF,
 	FIFO
