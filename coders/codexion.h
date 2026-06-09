@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 15:05:41 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/09 13:51:45 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/09 13:59:18 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,8 +158,9 @@ int				custom_clean(t_manager *manager);
 int				ft_error(void);
 int				allocation_error(void);
 int				thread_error(void);
+int				one_coder_clean(t_manager *manager);
+int				too_much(void);
 void			final_clean(t_manager *manager);
-void			one_coder_clean(t_manager *manager);
 void			destroy_const_mutex(t_manager *manager);
 void			destroy_mutex_dongle(t_manager *manager, int max);
 void			destroy_mutex_coders(t_manager *manager, int max);

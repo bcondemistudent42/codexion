@@ -6,7 +6,7 @@
 /*   By: bcondemi <bcondemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 14:17:16 by bcondemi          #+#    #+#             */
-/*   Updated: 2026/06/05 15:00:47 by bcondemi         ###   ########.fr       */
+/*   Updated: 2026/06/09 13:59:46 by bcondemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,11 @@ int	allocation_error(void)
 int	thread_error(void)
 {
 	printf("A pthread Error occured\n");
+	return (-1);
+}
+
+int	too_much(void)
+{
+	printf("Max Coders number is 200\n");
 	return (-1);
 }
